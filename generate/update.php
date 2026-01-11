@@ -411,14 +411,13 @@
 	
 	$StatementInsertConstant = $Database->prepare('INSERT INTO `'.$Columns['Constants'].'`(`Constant`, `Comment`, `Tags`, `IncludeName`) VALUES (?, ?, ?, ?)');
 	
+	$Database->query( 'TRUNCATE TABLE `' . $Columns[ 'Files' ] . '`' );
+	$Database->query( 'TRUNCATE TABLE `' . $Columns[ 'Constants' ] . '`' );
+	$Database->query( 'TRUNCATE TABLE `' . $Columns[ 'Functions' ] . '`' );
+
+	$Database->beginTransaction();
 	try
 	{
-		$Database->beginTransaction();
-		
-		$Database->query( 'TRUNCATE TABLE `' . $Columns[ 'Files' ] . '`' );
-		$Database->query( 'TRUNCATE TABLE `' . $Columns[ 'Constants' ] . '`' );
-		$Database->query( 'TRUNCATE TABLE `' . $Columns[ 'Functions' ] . '`' );
-
 		foreach( $BigListOfFunctions as $IncludeName => $Functions )
 		{
 			$File = file_get_contents( $FilesList[ $IncludeName ] );
@@ -446,10 +445,23 @@
 				);
 			}
 		}
-		
+
 		$Database->commit();
-		$Database->beginTransaction();
+	}
+	catch( PDOException $e )
+	{
+		// Only rollback if a transaction is actually active
+		if ( $Database->inTransaction() )
+		{
+			$Database->rollback();
+		}
 		
+		throw new Exception( 'Caught PDOException: ' . $e->getMessage() );
+	}
+
+	$Database->beginTransaction();
+
+	try {
 		foreach( $BigListOfConstants as $IncludeName => $Functions )
 		{
 			foreach( $Functions as $Function )
@@ -471,7 +483,11 @@
 	}
 	catch( PDOException $e )
 	{
-		$Database->rollback();
+		// Only rollback if a transaction is actually active
+    if ( $Database->inTransaction() )
+    {
+			$Database->rollback();
+    }
 		
 		throw new Exception( 'Caught PDOException: ' . $e->getMessage() );
 	}
