@@ -1,0 +1,54 @@
+x-common-variables: &env-files
+  - .env
+  # - .env.local
+
+services:
+  mysql_db:
+    image: mariadb:12.1
+    env_file: *env-files
+    restart: always
+    volumes:
+      - ./sql:/docker-entrypoint-initdb.d/:ro
+    healthcheck:
+      test: [ "CMD", "healthcheck.sh", "--connect", "--innodb_initialized" ]
+      start_period: 10s
+      interval: 3s
+      timeout: 5s
+      retries: 15
+
+  # adminer:
+  #   image: adminer:5
+  #   ports:
+  #     - 85:8080
+  #   restart: always
+  #   depends_on:
+  #     mysql_db:
+  #       condition: service_healthy
+
+  php-fpm:
+    build:
+      context: docker/
+    container_name: php
+    restart: always
+    volumes:
+      - ./www:/var/www/html:ro
+      - ./settings.php:/var/www/settings.php:ro
+
+      - ./generate:/srv/pawn-docgen/generate:ro
+      - ./include:/srv/pawn-docgen/include:ro
+      - ./settings.php:/srv/pawn-docgen/settings.php:ro
+    env_file: *env-files
+    depends_on:
+      mysql_db:
+        condition: service_healthy
+
+  nginx:
+    image: nginx:1-alpine
+    container_name: nginx
+    restart: always
+    ports:
+      - 83:80
+    volumes:
+      - ./docker/nginx/conf.d/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - php-fpm
