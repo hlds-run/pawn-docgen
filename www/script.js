@@ -37,6 +37,18 @@
 			nav.addClass( 'show' );
 		}
 	} );
+
+	// Menu toggle for mobile
+	$('.menu-toggle').on('click', function () {
+		$('.sidebar').toggleClass('open');
+	});
+
+	// Close sidebar when link inside is clicked (mobile)
+	$('.sidebar a').on('click', function () {
+		if (window.innerWidth < 768) {
+			$('.sidebar').removeClass('open');
+		}
+	});
 	
 	var functions = [];
 	

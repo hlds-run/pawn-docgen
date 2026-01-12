@@ -16,6 +16,13 @@
 	<link rel="stylesheet" href="<?php echo $BaseURL; ?>style.css">
 </head>
 <body data-baseurl="<?php echo $BaseURL; ?>">
+	<div class="mobile-header">
+		<button class="menu-toggle" aria-label="Toggle menu">☰</button>
+		<div class="header-link">
+			<a href="<?php echo $BaseURL; ?>"><?php echo $Project; ?> API</a>
+		</div>
+	</div>
+
 	<div class="sidebar">
 		<div class="header-link">
 			<a href="<?php echo $BaseURL; ?>"><?php echo $Project; ?> API</a>
