@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 set -euo pipefail
 
 AMXX_URL="https://www.amxmodx.org/amxxdrop/1.10/amxmodx-latest-base-linux.tar.gz"
