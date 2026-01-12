@@ -28,7 +28,6 @@ services:
   php-fpm:
     build:
       context: docker/
-    container_name: php
     restart: always
     volumes:
       - ./www:/var/www/html:ro
@@ -44,7 +43,6 @@ services:
 
   nginx:
     image: nginx:1-alpine
-    container_name: nginx
     restart: always
     ports:
       - 83:80
