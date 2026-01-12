@@ -93,7 +93,7 @@ pre.syntax {
 }
 
 .nav-functions {
-  display: block;
+  display: none;
 }
 
 /* Make nav links easier to tap on mobile */
