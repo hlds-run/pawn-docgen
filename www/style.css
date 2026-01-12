@@ -184,6 +184,30 @@ pre.syntax {
 	padding-top: 10px;
 }
 
+/* Breadcrumb: prevent awkward wrapping on small screens — allow horizontal scroll */
+.breadcrumb {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 6px 8px;
+}
+
+.breadcrumb > li {
+  white-space: nowrap;
+}
+
+/* Ensure pull-right items appear at the end in flex layout */
+.breadcrumb > li.pull-right {
+  margin-left: 8px;
+  float: none;
+  order: 2;
+}
+
+.breadcrumb > li:not(.pull-right) {
+  order: 1;
+}
+
 @media (min-width: 768px) {
 	body {
 		margin-left: 300px;
