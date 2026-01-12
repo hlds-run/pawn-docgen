@@ -245,3 +245,13 @@ pre.syntax {
 	padding: 3px 0;
 	border-bottom: 1px solid #ccc;
 }
+
+/* =========================================================
+	 Dark mode (inversion-based, experimental)
+	 ========================================================= */
+
+@media (prefers-color-scheme: dark) {
+	html {
+		filter: invert(0.85) hue-rotate(180deg);
+	}
+}
