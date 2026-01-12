@@ -29,6 +29,9 @@
 pre, code {
 	font-size: 14px;
 	border: 0;
+	max-width: 100%;
+	overflow: auto;
+	word-wrap: break-word;
 }
 
 pre.description {
