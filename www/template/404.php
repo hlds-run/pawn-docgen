@@ -4,7 +4,7 @@
 	require __DIR__ . '/header.php';
 ?>
 
-<h1 class="page-header">Nothing found</h1>
+<h3 class="page-header">Nothing found</h3>
 
 <?php
 	require __DIR__ . '/footer.php';

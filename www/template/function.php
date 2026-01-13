@@ -28,7 +28,7 @@
 	<li class="pull-right"><a href="<?php echo $BaseURL . $CurrentOpenFile; ?>">Constants</a></li>
 </ol>
 
-<h1 class="page-header"><?php echo htmlspecialchars( $PageFunction[ 'Function' ] ); ?></h1>
+<h3 class="page-header"><?php echo htmlspecialchars( $PageFunction[ 'Function' ] ); ?></h3>
 
 <h4 class="sub-header2">Syntax</h4>
 <pre class="syntax"><?php echo htmlspecialchars( $PageFunction[ 'FullFunction' ] ); ?></pre>

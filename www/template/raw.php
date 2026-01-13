@@ -10,7 +10,7 @@
 	<li class="pull-right"><a href="<?php echo $BaseURL . $CurrentOpenFile; ?>">Constants</a></li>
 </ol>
 
-<h1 class="page-header"><?php echo htmlspecialchars( $CurrentOpenFile ); ?>.inc</h1>
+<h3 class="page-header"><?php echo htmlspecialchars( $CurrentOpenFile ); ?>.inc</h3>
 
 <style>
 	#editor { width: 100%; height: 75vh; border: 1px solid #ddd; }
