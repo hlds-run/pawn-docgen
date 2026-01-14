@@ -6,11 +6,11 @@
 	<li><a href="<?php echo $BaseURL . $CurrentOpenFile; ?>"><?php echo $CurrentOpenFile; ?>.inc</a></li>
 	<li class="active">Functions</li>
 	
-	<li class="pull-right"><a href="<?php echo $BaseURL . $CurrentOpenFile; ?>/__raw">File</a></li>
-	<li class="pull-right"><a href="<?php echo $BaseURL . $CurrentOpenFile; ?>">Constants</a></li>
+	<li class="ms-auto"><a href="<?php echo $BaseURL . $CurrentOpenFile; ?>/__raw">File</a></li>
+	<li><a href="<?php echo $BaseURL . $CurrentOpenFile; ?>">Constants</a></li>
 </ol>
 
-<h3 class="page-header">List of functions in <?php echo htmlspecialchars( $CurrentOpenFile ); ?>.inc</h3>
+<h3 class="border-bottom pb-2 mb-3">List of functions in <?php echo htmlspecialchars( $CurrentOpenFile ); ?>.inc</h3>
 
 <div class="table-responsive">
 	<table class="table table-bordered table-hover">

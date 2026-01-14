@@ -6,11 +6,11 @@
 	<li><a href="<?php echo $BaseURL . $CurrentOpenFile; ?>"><?php echo $CurrentOpenFile; ?>.inc</a></li>
 	<li class="active">Constants</li>
 	
-	<li class="pull-right"><a href="<?php echo $BaseURL . $CurrentOpenFile; ?>/__raw">File</a></li>
-	<li class="pull-right"><a href="<?php echo $BaseURL . $CurrentOpenFile; ?>/__functions">Functions</a></li>
+	<li class="ms-auto"><a href="<?php echo $BaseURL . $CurrentOpenFile; ?>/__raw">File</a></li>
+	<li><a href="<?php echo $BaseURL . $CurrentOpenFile; ?>/__functions">Functions</a></li>
 </ol>
 
-<h3 class="page-header">List of constants in <?php echo htmlspecialchars( $PageName ); ?>.inc</h3>
+<h3 class="border-bottom pb-2 mb-3">List of constants in <?php echo htmlspecialchars( $PageName ); ?>.inc</h3>
 
 <?php
 	$InSection = 0;
@@ -27,14 +27,14 @@
 			
 			$Slug = StringToSlug( $Result[ 'Comment' ] );
 			
-			echo '<div class="panel panel-info" id="' . $Slug . '">';
-			echo '<div class="panel-heading">' . htmlspecialchars( substr( $Result[ 'Comment' ], 9 ) ) . '<a href="#' . $Slug . '" class="permalink pull-right">#</a></div>';
+			echo '<div class="card card-info mb-3" id="' . $Slug . '">';
+			echo '<div class="card-header bg-info text-white">' . htmlspecialchars( substr( $Result[ 'Comment' ], 9 ) ) . '<a href="#' . $Slug . '" class="permalink float-end">#</a></div>';
 			
 			if( Empty( $Tags ) && Empty( $Result[ 'Constant' ] ) )
 			{
 				$InSectionBody++;
 				
-				echo '<div class="panel-body">';
+				echo '<div class="card-body">';
 				
 				continue;
 			}
@@ -58,15 +58,15 @@
 		{
 			$Slug = StringToSlug( $Result[ 'Comment' ] );
 			
-			echo '<div class="panel panel-primary" id="' . $Slug . '">';
-			echo '<div class="panel-heading">' . htmlspecialchars( $Result[ 'Comment' ] ) . '<a href="#' . $Slug . '" class="permalink pull-right">#</a></div>';
+			echo '<div class="card card-primary mb-3" id="' . $Slug . '">';
+			echo '<div class="card-header bg-primary text-white">' . htmlspecialchars( $Result[ 'Comment' ] ) . '<a href="#' . $Slug . '" class="permalink float-end">#</a></div>';
 			
 			$ClosePanel = true;
 		}
 		
 		if( !Empty( $Tags ) )
 		{
-			echo '<div class="panel-body">';
+			echo '<div class="card-body">';
 			
 			foreach( $Tags as $Tag )
 			{
@@ -83,7 +83,7 @@
 		
 		if( !Empty( $Result[ 'Constant' ] ) )
 		{
-			echo '<div class="panel-footer"><pre class="description">' . htmlspecialchars( $Result[ 'Constant' ] ) . '</pre></div>';
+			echo '<div class="card-footer"><pre class="description">' . htmlspecialchars( $Result[ 'Constant' ] ) . '</pre></div>';
 		}
 		
 		if( $ClosePanel )
