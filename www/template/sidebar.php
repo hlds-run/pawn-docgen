@@ -39,7 +39,7 @@
 		}
 		else
 		{
-			echo '<div class="card border-primary mb-2"><div class="card-header bg-primary text-white">No functions</div><div class="card-body">This include file has no functions.</div></div>';
+			echo '<div class="card border-primary mb-2"><div class="card-header bg-primary text-white">No functions</div><div class="card-body text-center">This include file has no functions.</div></div>';
 		}
 		
 		echo '</div>';
