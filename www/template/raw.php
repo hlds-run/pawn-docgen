@@ -4,10 +4,10 @@
 
 <ol class="breadcrumb">
 	<li><a href="<?php echo $BaseURL . $CurrentOpenFile; ?>"><?php echo $CurrentOpenFile; ?>.inc</a></li>
-	<li class="active">Raw</li>
+	<li class="active">File</li>
 	
-	<li class="pull-right"><a href="<?php echo $BaseURL . $CurrentOpenFile; ?>/__functions">Functions</a></li>
-	<li class="pull-right"><a href="<?php echo $BaseURL . $CurrentOpenFile; ?>">Constants</a></li>
+	<li class="ms-auto"><a href="<?php echo $BaseURL . $CurrentOpenFile; ?>/__functions">Functions</a></li>
+	<li><a href="<?php echo $BaseURL . $CurrentOpenFile; ?>">Constants</a></li>
 </ol>
 
 <h3 class="border-bottom pb-2 mb-3"><?php echo htmlspecialchars( $CurrentOpenFile ); ?>.inc</h3>
