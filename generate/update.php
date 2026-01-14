@@ -349,7 +349,15 @@
 	
 	function RemoveWhitespace( $Original, $Line )
 	{
-		return preg_replace('/\s+/', ' ', $Line);
+		$lines = explode("\n", $Line);
+
+		foreach( $lines as &$l )
+		{
+			$l = preg_replace('/[ \t]+/', ' ', $l);
+			$l = trim( $l );
+		}
+
+		return implode("\n", $lines);
 	}
 	
 	function GetFunctionName( $Line )

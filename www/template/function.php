@@ -36,7 +36,13 @@
 <?php if( !empty( $Parameters ) ): ?>
 <h4 class="sub-header2">Usage</h4>
 <div class="table-responsive">
-	<table class="table table-sm table-bordered">
+	<table class="table table-bordered table-hover">
+		<thead>
+			<tr>
+				<th>Parameter</th>
+				<th>Description</th>
+			</tr>
+		</thead>
 		<?php
 			foreach( $Parameters as $Tag )
 			{
