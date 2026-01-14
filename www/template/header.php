@@ -12,7 +12,7 @@
 	
 	<title><?php echo $Title; ?></title>
 	
-	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/css/bootstrap.min.css">
+	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.8/css/bootstrap.min.css">
 	<link rel="stylesheet" href="<?php echo $BaseURL; ?>style.css">
 </head>
 <body data-baseurl="<?php echo $BaseURL; ?>">
@@ -36,13 +36,16 @@
 					display: none;
 				}
 				
-				.bg-primary {
+				.search-notice {
 					padding: 10px;
 					text-align: center;
+					background-color: #e7f1ff;
+					border: 1px solid #bee5eb;
+					border-radius: 0.375rem;
 				}
 			</style>
 			
-			<p class="bg-primary">Search requires javascript to work</p>
+			<p class="search-notice">Search requires javascript to work</p>
 		</noscript>
 		
 		<?php require __DIR__ . '/sidebar.php'; ?>

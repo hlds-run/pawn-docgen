@@ -24,11 +24,11 @@
 	<li><a href="<?php echo $BaseURL . $CurrentOpenFile; ?>/__functions">Functions</a></li>
 	<li class="active"><?php echo htmlspecialchars( $PageFunction[ 'Function' ] ); ?></li>
 	
-	<li class="pull-right"><a href="<?php echo $BaseURL . $CurrentOpenFile; ?>/__raw">File</a></li>
-	<li class="pull-right"><a href="<?php echo $BaseURL . $CurrentOpenFile; ?>">Constants</a></li>
+	<li class="ms-auto"><a href="<?php echo $BaseURL . $CurrentOpenFile; ?>/__raw">File</a></li>
+	<li><a href="<?php echo $BaseURL . $CurrentOpenFile; ?>">Constants</a></li>
 </ol>
 
-<h3 class="page-header"><?php echo htmlspecialchars( $PageFunction[ 'Function' ] ); ?></h3>
+<h3 class="border-bottom pb-2 mb-3"><?php echo htmlspecialchars( $PageFunction[ 'Function' ] ); ?></h3>
 
 <h4 class="sub-header2">Syntax</h4>
 <pre class="syntax"><?php echo htmlspecialchars( $PageFunction[ 'FullFunction' ] ); ?></pre>
@@ -36,7 +36,7 @@
 <?php if( !empty( $Parameters ) ): ?>
 <h4 class="sub-header2">Usage</h4>
 <div class="table-responsive">
-	<table class="table table-condensed table-bordered">
+	<table class="table table-sm table-bordered">
 		<?php
 			foreach( $Parameters as $Tag )
 			{

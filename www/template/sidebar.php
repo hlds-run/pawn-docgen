@@ -22,7 +22,7 @@
 					
 					$OpenList = true;
 					
-					echo GetFunctionHeader( $Function[ 'Type' ] ) . '<div class="panel-body panel-sidebar"><ul class="nav nav-sidebar">';
+					echo GetFunctionHeader( $Function[ 'Type' ] ) . '<div class="card-body"><ul class="nav nav-sidebar">';
 				}
 				
 				$FunctionName = htmlspecialchars( $Function[ 'Function' ] );
@@ -39,7 +39,7 @@
 		}
 		else
 		{
-			echo '<div class="panel panel-primary"><div class="panel-heading">No functions</div><div class="panel-body">This include file has no functions.</div></div>';
+			echo '<div class="card border-primary mb-2"><div class="card-header bg-primary text-white">No functions</div><div class="card-body text-center">This include file has no functions.</div></div>';
 		}
 		
 		echo '</div>';
@@ -49,11 +49,11 @@
 	{
 		switch( $Type )
 		{
-			case 'forward': return '<div class="panel panel-info"><div class="panel-heading">Forwards</div>';
-			case 'native': return '<div class="panel panel-success"><div class="panel-heading">Natives</div>';
-			case 'stock': return '<div class="panel panel-warning"><div class="panel-heading">Stocks</div>';
-			case 'functag': return '<div class="panel panel-danger"><div class="panel-heading">Functags</div>';
+			case 'forward': return '<div class="card border-info mb-2"><div class="card-header bg-info text-white">Forwards</div>';
+			case 'native': return '<div class="card border-success mb-2"><div class="card-header bg-success text-white">Natives</div>';
+			case 'stock': return '<div class="card border-warning mb-2"><div class="card-header bg-warning">Stocks</div>';
+			case 'functag': return '<div class="card border-danger mb-2"><div class="card-header bg-danger text-white">Functags</div>';
 		}
 		
-		return '<div class="panel panel-primary"><div class="panel-heading">' . $Type . '</div>';
+		return '<div class="card border-primary mb-2"><div class="card-header bg-primary text-white">' . $Type . '</div>';
 	}

@@ -2,7 +2,7 @@
 	require __DIR__ . '/header.php';
 ?>
 
-<h2 class="page-header">Welcome to the <?php echo $Project; ?> Scripting API Reference</h2>
+<h2 class="border-bottom pb-2 mb-3">Welcome to the <?php echo $Project; ?> Scripting API Reference</h2>
 
 <p>For more information, see the <a href="http://wiki.alliedmods.net/Category:<?php echo str_replace( ' ', '_', $Project ); ?>_Scripting"><?php echo $Project; ?> Scripting Wiki</a>, which contains tutorials on specific topics.</p>
 <hr>
