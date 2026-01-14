@@ -1,52 +1,108 @@
 .header-link {
-	text-align: center;
-	font-size: 24px;
-	border-bottom: 1px solid #eee;
+  text-align: center;
+  font-size: 24px;
+  border-bottom: 1px solid #eee;
 }
 
 .header-link > a {
-	color: #563D7C;
+  color: #563d7c;
 }
 
 .sub-header {
-	padding-top: 25px;
-	padding-bottom: 10px;
-	border-bottom: 1px solid #eee;
+  padding-top: 25px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
 }
 
 .sub-header2 {
-	padding-top: 10px;
+  padding-top: 10px;
 }
 
+/* Bootstrap 5 compatibility */
+.page-header {
+  padding-bottom: 9px;
+  margin: 40px 0 20px;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+/* Bootstrap 5 Popover styles */
+.popover {
+  max-width: 300px;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 0.375rem;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.popover-header {
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  background-color: rgba(0, 0, 0, 0.03);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.popover-body {
+  padding: 0.5rem 0.75rem;
+  color: #212529;
+}
+
+.function {
+  cursor: pointer;
+}
+
+/* Links styling - be specific to not override other styles */
+a {
+  color: #0d6efd;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #0b5ed7;
+  text-decoration: underline;
+}
+
+/* Specific link overrides */
 .file > a {
-	color: #999;
+  color: #999;
 }
 
 .file > a:hover {
-	color: #563D7C;
+  color: #563d7c;
+  text-decoration: none;
 }
 
-pre, code {
-	font-size: 14px;
-	border: 0;
-	max-width: 100%;
-	overflow: auto;
-	word-wrap: break-word;
+.breadcrumb > li a {
+  text-decoration: none;
+  color: #0d6efd;
+}
+
+.breadcrumb > li a:hover {
+  text-decoration: underline;
+}
+
+pre,
+code {
+  font-size: 14px;
+  border: 0;
+  max-width: 100%;
+  overflow: auto;
+  word-wrap: break-word;
 }
 
 pre.description {
-	background: none;
-	margin: 0;
-	padding: 0;
+  background: none;
+  margin: 0;
+  padding: 0;
 }
 
 pre.syntax {
-	display: inline-block;
-	padding: 6px 8px;
-	color: #c7254e;
-	background-color: #f9f2f4;
-	border-radius: 4px;
-	border: 0;
+  display: inline-block;
+  padding: 6px 8px;
+  color: #c7254e;
+  background-color: #f9f2f4;
+  border-radius: 4px;
+  border: 0;
 }
 
 /* Mobile-first: show sidebar as a top block on small screens, desktop overrides below */
@@ -96,47 +152,68 @@ pre.syntax {
   display: none;
 }
 
+.nav-functions.show {
+  display: block;
+}
+
 /* Make nav links easier to tap on mobile */
+.nav-sidebar {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.nav-sidebar > li {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  clear: both;
+  float: none;
+}
+
 .nav-sidebar > li > a {
   padding: 12px 16px;
   line-height: 1.6;
+  display: block;
+  width: 100%;
 }
 
-.nav-functions .panel-sidebar {
-	padding: 15px 0;
+.nav-functions .card-body {
+  padding: 15px 0;
 }
 
 .nav-sidebar > li > a {
-	padding: 0 20px;
+  padding: 0 20px;
 }
 
-.nav-sidebar > .active > a,
-.nav-sidebar > .active > a:hover,
-.nav-sidebar > .active > a:focus {
-	color: #fff;
-	background-color: #428bca;
+.nav-sidebar > li.active > a,
+.nav-sidebar > li.active > a:hover,
+.nav-sidebar > li.active > a:focus {
+  color: #fff;
+  background-color: #0d6efd;
 }
 
 .permalink {
-	color: #FFF;
+  color: #fff;
 }
 
 .permalink:hover {
-	color: #F5F7FA;
+  color: #f5f7fa;
 }
 
-.panel-info > .panel-heading > .permalink {
-	color: #31708F;
+.card.border-info > .card-header > .permalink {
+  color: #084298;
 }
 
-.panel:target {
-	border-color: #faebcc;
+.card:target {
+  border-color: #fcf8e3;
 }
 
-.panel:target > .panel-heading {
-	color: #8a6d3b;
-	background-color: #fcf8e3;
-	border-color: #faebcc;
+.card:target > .card-header {
+  color: #664d03;
+  background-color: #fff3cd;
+  border-color: #fcf8e3;
 }
 
 .container-fluid {
@@ -182,132 +259,131 @@ pre.syntax {
 }
 
 .footer {
-	border-top: 1px solid #eee;
-	text-align: right;
-	padding-top: 10px;
+  border-top: 1px solid #eee;
+  text-align: right;
+  padding-top: 10px;
 }
 
-/* Breadcrumb: prevent awkward wrapping on small screens — allow horizontal scroll */
+/* Breadcrumb: Bootstrap 5 compatible */
 .breadcrumb {
+  margin-bottom: 1rem;
+  padding: 0.5rem 0;
+  background-color: transparent;
+  list-style: none;
   display: flex;
-  flex-wrap: nowrap;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  padding: 6px 8px;
+  flex-wrap: wrap;
 }
 
 .breadcrumb > li {
-  white-space: nowrap;
+  display: inline-block;
 }
 
-/* Ensure pull-right items appear at the end in flex layout */
-.breadcrumb > li.pull-right {
-  margin-left: 8px;
-  float: none;
-  order: 2;
+.breadcrumb > li::before {
+  content: "/";
+  margin: 0 0.5rem;
+  color: #6c757d;
 }
 
-.breadcrumb > li:not(.pull-right) {
-  order: 1;
+.breadcrumb > li:first-child::before {
+  content: none;
 }
 
-@media (min-width: 768px) {
-	body {
-		margin-left: 300px;
-	}
-	
-	.container-fluid {
-		padding-right: 40px;
-		padding-left: 40px;
-	}
-	
-	.sidebar {
-		position: fixed;
-		top: 0px;
-		bottom: 0;
-		left: 0;
-		z-index: 1000;
-		display: block;
-		width: 300px;
-		padding: 20px;
-		overflow-x: hidden;
-		overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
-		background-color: #f5f5f5;
-		border-right: 1px solid #eee;
-	}
+.breadcrumb > li a {
+  text-decoration: none;
+  color: #0d6efd;
+}
+
+.breadcrumb > li a:hover {
+  text-decoration: underline;
+}
+
+.breadcrumb > li.ms-auto {
+  margin-left: auto;
+}
+
+.breadcrumb > li.active {
+  color: #6c757d;
 }
 
 /**
  * NProgress - http://ricostacruz.com/nprogress
  */
 #nprogress {
-	pointer-events: none;
+  pointer-events: none;
 }
 
 #nprogress .bar {
-	background: #29d;
-	position: fixed;
-	z-index: 1031;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 2px;
+  background: #29d;
+  position: fixed;
+  z-index: 1031;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
 }
 
 /* Fancy blur effect */
 #nprogress .peg {
-	display: block;
-	position: absolute;
-	right: 0px;
-	width: 100px;
-	height: 100%;
-	box-shadow: 0 0 10px #29d, 0 0 5px #29d;
-	opacity: 1.0;
-	
-	-webkit-transform: rotate(3deg) translate(0px, -4px);
-	  -ms-transform: rotate(3deg) translate(0px, -4px);
-	      transform: rotate(3deg) translate(0px, -4px);
+  display: block;
+  position: absolute;
+  right: 0px;
+  width: 100px;
+  height: 100%;
+  box-shadow: 0 0 10px #29d, 0 0 5px #29d;
+  opacity: 1;
+
+  -webkit-transform: rotate(3deg) translate(0px, -4px);
+  -ms-transform: rotate(3deg) translate(0px, -4px);
+  transform: rotate(3deg) translate(0px, -4px);
 }
 
 #nprogress .spinner {
-	display: block;
-	position: fixed;
-	z-index: 1031;
-	top: 15px;
-	right: 15px;
+  display: block;
+  position: fixed;
+  z-index: 1031;
+  top: 15px;
+  right: 15px;
 }
 
 #nprogress .spinner-icon {
-	width: 18px;
-	height: 18px;
-	box-sizing: border-box;
+  width: 18px;
+  height: 18px;
+  box-sizing: border-box;
 
-	border: solid 2px transparent;
-	border-top-color: #29d;
-	border-left-color: #29d;
-	border-radius: 50%;
+  border: solid 2px transparent;
+  border-top-color: #29d;
+  border-left-color: #29d;
+  border-radius: 50%;
 
-	-webkit-animation: nprogress-spinner 400ms linear infinite;
-	      animation: nprogress-spinner 400ms linear infinite;
+  -webkit-animation: nprogress-spinner 400ms linear infinite;
+  animation: nprogress-spinner 400ms linear infinite;
 }
 
 .nprogress-custom-parent {
-	overflow: hidden;
-	position: relative;
+  overflow: hidden;
+  position: relative;
 }
 
 .nprogress-custom-parent #nprogress .spinner,
 .nprogress-custom-parent #nprogress .bar {
-	position: absolute;
+  position: absolute;
 }
 
 @-webkit-keyframes nprogress-spinner {
-	0%   { -webkit-transform: rotate(0deg); }
-	100% { -webkit-transform: rotate(360deg); }
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
 }
 @keyframes nprogress-spinner {
-	0%   { transform: rotate(0deg); }
-	100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /**
@@ -315,43 +391,45 @@ pre.syntax {
  * https://github.com/twitter/typeahead.js
  */
 .twitter-typeahead {
-	width: 100%;
+  width: 100%;
 }
 
 .tt-hint {
-	color: #999
+  color: #999;
 }
 
-.tt-dropdown-menu {
-	width: 100%;
-	margin-top: 12px;
-	padding: 8px 0;
-	background-color: #fff;
-	border: 1px solid #ccc;
-	border: 1px solid rgba(0, 0, 0, 0.2);
-	border-radius: 4px;
+.tt-menu {
+  width: 100%;
+  margin-top: 12px;
+  padding: 8px 0;
+  background-color: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 0.375rem;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+  max-height: 400px;
+  overflow-y: auto;
 }
 
 .tt-suggestion {
-	padding: 3px 20px;
-	font-size: 18px;
-	line-height: 24px;
-	cursor: pointer;
+  padding: 3px 20px;
+  font-size: 18px;
+  line-height: 24px;
+  cursor: pointer;
 }
 
 .tt-suggestion.tt-cursor {
-	color: #fff;
-	background-color: #0097cf;
+  color: #fff;
+  background-color: #0097cf;
 }
 
 .tt-suggestion p {
-	margin: 0;
+  margin: 0;
 }
 
 .tt-name {
-	margin: 0 20px 5px 20px;
-	padding: 3px 0;
-	border-bottom: 1px solid #ccc;
+  margin: 0 20px 5px 20px;
+  padding: 3px 0;
+  border-bottom: 1px solid #ccc;
 }
 
 /* =========================================================
@@ -359,7 +437,7 @@ pre.syntax {
 	 ========================================================= */
 
 @media (prefers-color-scheme: dark) {
-	html {
-		filter: invert(0.85) hue-rotate(180deg);
-	}
+  html {
+    filter: invert(0.85) hue-rotate(180deg);
+  }
 }
