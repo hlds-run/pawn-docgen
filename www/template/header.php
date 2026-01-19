@@ -97,6 +97,10 @@
 	<!-- Canonical URL -->
 	<link rel="canonical" href="<?php echo htmlspecialchars( $CurrentPageURL ?? $BaseURL ); ?>">
 	
+	<!-- Additional SEO Meta Tags -->
+	<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+	<meta name="theme-color" content="#0d6efd">
+	
 	<title><?php echo $Title; ?></title>
 	
 	<!-- Schema.org Structured Data -->
@@ -182,7 +186,9 @@
 				'@type' => 'Organization',
 				'name' => 'AlliedModders'
 			),
-			'datePublished' => date( 'Y-m-d' )
+			'datePublished' => date( 'Y-m-d' ),
+			'proficiencyLevel' => 'Intermediate',
+			'keywords' => implode( ', ', array( $PageFunction[ 'Function' ], 'scripting', 'API', $CurrentOpenFile ) )
 		);
 		
 		echo json_encode( $articleSchema, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES );
