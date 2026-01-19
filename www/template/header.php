@@ -24,6 +24,9 @@
 	if( !empty( $PageFunction ) ) {
 		// Function page
 		$MetaDescription = getTruncatedDescription( $PageFunction[ 'Comment' ] );
+	} elseif( !empty( $IsRawView ) ) {
+		// Raw file view
+		$MetaDescription = 'Source code of ' . htmlspecialchars( $CurrentOpenFile ) . '.inc file';
 	} elseif( !empty( $PageFunctions ) ) {
 		// Functions list page (either via __functions or redirected from empty constants)
 		$MetaDescription = 'List of functions in ' . htmlspecialchars( $CurrentOpenFile ) . '.inc file';
@@ -41,6 +44,9 @@
 	if( !empty( $PageFunction ) ) {
 		// Function page: FunctionName | Functions | FileName | SiteName
 		$Title = htmlspecialchars( $PageFunction[ 'Function' ] ) . ' | Functions | ' . htmlspecialchars( $CurrentOpenFile ) . ' | ' . $Project;
+	} elseif( !empty( $IsRawView ) ) {
+		// Raw file view: File content | FileName | SiteName
+		$Title = 'File content | ' . htmlspecialchars( $CurrentOpenFile ) . ' | ' . $Project;
 	} elseif( !empty( $PageFunctions ) ) {
 		// Functions list page: Functions | FileName | SiteName
 		$Title = 'Functions | ' . htmlspecialchars( $CurrentOpenFile ) . ' | ' . $Project;

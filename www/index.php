@@ -95,6 +95,7 @@
 						exit;
 					}
 					
+					$IsRawView = true;
 					require __DIR__ . '/template/raw.php';
 				}
 				else if( $Action === '__functions' )
