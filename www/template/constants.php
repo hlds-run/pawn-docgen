@@ -2,15 +2,19 @@
 	require __DIR__ . '/header.php';
 ?>
 
-<ol class="breadcrumb">
-	<li><a href="<?php echo $BaseURL . $CurrentOpenFile; ?>"><?php echo $CurrentOpenFile; ?>.inc</a></li>
-	<li class="active">Constants</li>
-	
-	<li class="ms-auto"><a href="<?php echo $BaseURL . $CurrentOpenFile; ?>/__raw">File</a></li>
-	<li><a href="<?php echo $BaseURL . $CurrentOpenFile; ?>/__functions">Functions</a></li>
-</ol>
+<nav aria-label="Breadcrumb">
+	<ol class="breadcrumb">
+		<li class="breadcrumb-item"><a href="<?php echo $BaseURL; ?>"><?php echo $Project; ?></a></li>
+		<li class="breadcrumb-item"><a href="<?php echo $BaseURL . $CurrentOpenFile; ?>"><?php echo $CurrentOpenFile; ?>.inc</a></li>
+		<li class="breadcrumb-item active" aria-current="page">Constants</li>
+		<li class="ms-auto"><a href="<?php echo $BaseURL . $CurrentOpenFile; ?>/__raw">File</a></li>
+		<li><a href="<?php echo $BaseURL . $CurrentOpenFile; ?>/__functions">Functions</a></li>
+	</ol>
+</nav>
 
-<h3 class="border-bottom pb-2 mb-3">List of constants in <?php echo htmlspecialchars( $PageName ); ?>.inc</h3>
+<h1 class="border-bottom pb-2 mb-3">Constants in <?php echo htmlspecialchars( $PageName ); ?>.inc</h1>
+
+<h2>List of constants</h2>
 
 <?php
 	$InSection = 0;
@@ -68,13 +72,31 @@
 		{
 			echo '<div class="card-body">';
 			
+			// Group tags by type to handle multiple items of same type
+			$GroupedTags = Array();
 			foreach( $Tags as $Tag )
 			{
-				echo '<h4 class="sub-header2">' . ucfirst( $Tag[ 'Tag' ] ) . '</h4>';
+				$GroupedTags[ $Tag[ 'Tag' ] ][] = $Tag;
+			}
+			
+			foreach( $GroupedTags as $TagType => $TagList )
+			{
+				echo '<h4 class="sub-header2">' . ucfirst( $TagType ) . '</h4>';
 				
-				if( isset( $Tag[ 'Description' ] ) )
+				// If multiple items of same type, use list
+				if( count( $TagList ) > 1 )
 				{
-					echo '<pre class="description">' . htmlspecialchars( $Tag[ 'Description' ] ) . '</pre>';
+					echo '<ul>';
+					foreach( $TagList as $Tag )
+					{
+						echo '<li><pre class="description">' . htmlspecialchars( $Tag[ 'Description' ] ) . '</pre></li>';
+					}
+					echo '</ul>';
+				}
+				else
+				{
+					// Single item - use pre
+					echo '<pre class="description">' . htmlspecialchars( $TagList[0][ 'Description' ] ) . '</pre>';
 				}
 			}
 			

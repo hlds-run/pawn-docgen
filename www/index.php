@@ -2,6 +2,21 @@
 	require __DIR__ . '/../settings.php';
 	
 	$Path = isset( $_SERVER[ 'QUERY_STRING' ] ) ? trim( $_SERVER[ 'QUERY_STRING' ], '/' ) : '';
+	
+	// Handle robots.txt dynamically
+	if( $Path === 'robots.txt' )
+	{
+		require __DIR__ . '/template/robots.txt.php';
+		exit;
+	}
+	
+	// Handle sitemap.xml dynamically
+	if( $Path === 'sitemap.xml' )
+	{
+		require __DIR__ . '/template/sitemap.xml.php';
+		exit;
+	}
+	
 	$RenderLayout = !isset( $_SERVER[ 'HTTP_X_PJAX' ] ) || $_SERVER[ 'HTTP_X_PJAX' ] !== 'true';
 	
 	if( substr( $Path, 0, 8 ) === '__search' )
@@ -80,6 +95,7 @@
 						exit;
 					}
 					
+					$IsRawView = true;
 					require __DIR__ . '/template/raw.php';
 				}
 				else if( $Action === '__functions' )

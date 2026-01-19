@@ -19,22 +19,24 @@
 	}
 ?>
 
-<ol class="breadcrumb">
-	<li><a href="<?php echo $BaseURL . $CurrentOpenFile; ?>"><?php echo $CurrentOpenFile; ?>.inc</a></li>
-	<li><a href="<?php echo $BaseURL . $CurrentOpenFile; ?>/__functions">Functions</a></li>
-	<li class="active"><?php echo htmlspecialchars( $PageFunction[ 'Function' ] ); ?></li>
-	
-	<li class="ms-auto"><a href="<?php echo $BaseURL . $CurrentOpenFile; ?>/__raw">File</a></li>
-	<li><a href="<?php echo $BaseURL . $CurrentOpenFile; ?>">Constants</a></li>
-</ol>
+<nav aria-label="Breadcrumb">
+	<ol class="breadcrumb">
+		<li class="breadcrumb-item"><a href="<?php echo $BaseURL; ?>"><?php echo $Project; ?></a></li>
+		<li class="breadcrumb-item"><a href="<?php echo $BaseURL . $CurrentOpenFile; ?>"><?php echo $CurrentOpenFile; ?>.inc</a></li>
+		<li class="breadcrumb-item"><a href="<?php echo $BaseURL . $CurrentOpenFile; ?>/__functions">Functions</a></li>
+		<li class="breadcrumb-item active" aria-current="page"><?php echo htmlspecialchars( $PageFunction[ 'Function' ] ); ?></li>
+		<li class="ms-auto"><a href="<?php echo $BaseURL . $CurrentOpenFile; ?>/__raw">File</a></li>
+		<li><a href="<?php echo $BaseURL . $CurrentOpenFile; ?>">Constants</a></li>
+	</ol>
+</nav>
 
-<h3 class="border-bottom pb-2 mb-3"><?php echo htmlspecialchars( $PageFunction[ 'Function' ] ); ?></h3>
+<h1 class="border-bottom pb-2 mb-3"><?php echo htmlspecialchars( $PageFunction[ 'Function' ] ); ?></h1>
 
-<h4 class="sub-header2">Syntax</h4>
+<h2 class="sub-header2">Syntax</h2>
 <pre class="syntax"><?php echo htmlspecialchars( $PageFunction[ 'FullFunction' ] ); ?></pre>
 
 <?php if( !empty( $Parameters ) ): ?>
-<h4 class="sub-header2">Usage</h4>
+<h2 class="sub-header2">Usage</h2>
 <div class="table-responsive">
 	<table class="table table-bordered table-hover">
 		<thead>
@@ -53,18 +55,25 @@
 </div>
 <?php endif; ?>
 
-<h4 class="sub-header2">Description</h4>
+<h2 class="sub-header2">Description</h2>
 <pre class="description"><?php echo htmlspecialchars( $PageFunction[ 'Comment' ] ); ?></pre>
 
 <?php if( !empty( $OtherTags ) ): ?>
 <?php
+	// Group tags by type to handle multiple items of same type
+	$GroupedTags = Array();
 	foreach( $OtherTags as $Tag )
 	{
-		switch( $Tag[ 'Tag' ] )
+		$GroupedTags[ $Tag[ 'Tag' ] ][] = $Tag;
+	}
+	
+	foreach( $GroupedTags as $TagType => $Tags )
+	{
+		switch( $TagType )
 		{
 			case 'noreturn':
 			{
-				echo '<h4 class="sub-header2">Return</h4>';
+				echo '<h2 class="sub-header2">Return</h2>';
 				echo '<pre class="description">' . ( $PageFunction[ 'Type' ] === 'forward' ? 'This forward ignores the returned value.' : 'This function has no return value.' ) . '</pre>';
 				break;
 			}
@@ -73,9 +82,9 @@
 				echo '<div class="alert alert-danger" role="alert" style="margin-top:20px">';
 				echo '<p>This function has been deprecated, do NOT use it</p>';
 				
-				if( !empty( $Tag[ 'Description' ] ) )
+				if( !empty( $Tags[0][ 'Description' ] ) )
 				{
-					echo '<p><strong>Reason:</strong> ' . htmlspecialchars( $Tag[ 'Description' ] ) . '</p>';
+					echo '<p><strong>Reason:</strong> ' . htmlspecialchars( $Tags[0][ 'Description' ] ) . '</p>';
 				}
 				
 				echo '</div>';
@@ -83,8 +92,23 @@
 			}
 			default:
 			{
-				echo '<h4 class="sub-header2">' . ucfirst( $Tag[ 'Tag' ] ) . '</h4>';
-				echo '<pre class="description">' . htmlspecialchars( $Tag[ 'Description' ] ) . '</pre>';
+				echo '<h2 class="sub-header2">' . ucfirst( $TagType ) . '</h2>';
+				
+				// If multiple items of same type, use list
+				if( count( $Tags ) > 1 )
+				{
+					echo '<ul>';
+					foreach( $Tags as $Tag )
+					{
+						echo '<li><pre class="description">' . htmlspecialchars( $Tag[ 'Description' ] ) . '</pre></li>';
+					}
+					echo '</ul>';
+				}
+				else
+				{
+					// Single item - use pre
+					echo '<pre class="description">' . htmlspecialchars( $Tags[0][ 'Description' ] ) . '</pre>';
+				}
 			}
 		}
 	}

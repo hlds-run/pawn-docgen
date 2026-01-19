@@ -1,5 +1,62 @@
 <?php
-	$Title = ( empty( $HeaderTitle ) ? '' : ( htmlspecialchars( $HeaderTitle ) . ' · ' ) ) . $Project . ' Scripting API Reference';
+	// Meta description helper function
+	if( !function_exists( 'getTruncatedDescription' ) ) {
+		function getTruncatedDescription( $text, $maxLength = 160 ) {
+			if( empty( $text ) ) {
+				return '';
+			}
+			$text = trim( str_replace( array( "\n", "\r", "\t" ), ' ', $text ) );
+			if( strlen( $text ) > $maxLength ) {
+				$text = substr( $text, 0, $maxLength );
+				$lastSpace = strrpos( $text, ' ' );
+				if( $lastSpace !== false ) {
+					$text = substr( $text, 0, $lastSpace );
+				}
+				$text .= '...';
+			}
+			return htmlspecialchars( $text, ENT_QUOTES, 'UTF-8' );
+		}
+	}
+	
+	// Determine meta description based on page type
+	$MetaDescription = '';
+	
+	if( !empty( $PageFunction ) ) {
+		// Function page
+		$MetaDescription = getTruncatedDescription( $PageFunction[ 'Comment' ] );
+	} elseif( !empty( $IsRawView ) ) {
+		// Raw file view
+		$MetaDescription = 'Source code of ' . htmlspecialchars( $CurrentOpenFile ) . '.inc file';
+	} elseif( !empty( $PageFunctions ) ) {
+		// Functions list page (either via __functions or redirected from empty constants)
+		$MetaDescription = 'List of functions in ' . htmlspecialchars( $CurrentOpenFile ) . '.inc file';
+	} elseif( !empty( $CurrentOpenFile ) ) {
+		// Constants page
+		$MetaDescription = 'Constants and symbols from ' . htmlspecialchars( $CurrentOpenFile ) . '.inc file';
+	}
+	
+	// Fallback to project description
+	if( empty( $MetaDescription ) ) {
+		$MetaDescription = htmlspecialchars( $Project . ' Scripting API Reference - Browse functions, constants and symbols' );
+	}
+	
+	// Generate page title with pipe separators
+	if( !empty( $PageFunction ) ) {
+		// Function page: FunctionName | Functions | FileName | SiteName
+		$Title = htmlspecialchars( $PageFunction[ 'Function' ] ) . ' | Functions | ' . htmlspecialchars( $CurrentOpenFile ) . ' | ' . $Project;
+	} elseif( !empty( $IsRawView ) ) {
+		// Raw file view: File content | FileName | SiteName
+		$Title = 'File content | ' . htmlspecialchars( $CurrentOpenFile ) . ' | ' . $Project;
+	} elseif( !empty( $PageFunctions ) ) {
+		// Functions list page: Functions | FileName | SiteName
+		$Title = 'Functions | ' . htmlspecialchars( $CurrentOpenFile ) . ' | ' . $Project;
+	} elseif( !empty( $CurrentOpenFile ) ) {
+		// Constants page: Constants | FileName | SiteName
+		$Title = 'Constants | ' . htmlspecialchars( $CurrentOpenFile ) . ' | ' . $Project;
+	} else {
+		// Home page
+		$Title = $Project . ' Scripting API Reference';
+	}
 	
 	if( $RenderLayout ):
 ?>
@@ -9,8 +66,100 @@
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="<?php echo $MetaDescription; ?>">
 	
 	<title><?php echo $Title; ?></title>
+	
+	<!-- Schema.org Structured Data -->
+	<script type="application/ld+json">
+	<?php
+		// Generate breadcrumb schema
+		$breadcrumbItems = array();
+		$position = 1;
+		
+		// Add home
+		$breadcrumbItems[] = array(
+			'@type' => 'ListItem',
+			'position' => $position++,
+			'name' => $Project,
+			'item' => $BaseURL
+		);
+		
+		if( !empty( $CurrentOpenFile ) ) {
+			$breadcrumbItems[] = array(
+				'@type' => 'ListItem',
+				'position' => $position++,
+				'name' => $CurrentOpenFile . '.inc',
+				'item' => $BaseURL . $CurrentOpenFile
+			);
+		}
+		
+		if( !empty( $PageFunction ) ) {
+			$breadcrumbItems[] = array(
+				'@type' => 'ListItem',
+				'position' => $position++,
+				'name' => 'Functions',
+				'item' => $BaseURL . $CurrentOpenFile . '/__functions'
+			);
+			$breadcrumbItems[] = array(
+				'@type' => 'ListItem',
+				'position' => $position++,
+				'name' => $PageFunction[ 'Function' ],
+				'item' => $BaseURL . $CurrentOpenFile . '/' . htmlspecialchars( $PageFunction[ 'Function' ] )
+			);
+		} elseif( !empty( $CurrentOpenFile ) && isset( $_SERVER[ 'QUERY_STRING' ] ) && strpos( $_SERVER[ 'QUERY_STRING' ], '__functions' ) !== false ) {
+			$breadcrumbItems[] = array(
+				'@type' => 'ListItem',
+				'position' => $position++,
+				'name' => 'Functions',
+				'item' => $BaseURL . $CurrentOpenFile . '/__functions'
+			);
+		} elseif( !empty( $CurrentOpenFile ) ) {
+			$breadcrumbItems[] = array(
+				'@type' => 'ListItem',
+				'position' => $position++,
+				'name' => 'Constants',
+				'item' => $BaseURL . $CurrentOpenFile
+			);
+		}
+		
+		// Breadcrumb schema
+		$breadcrumbSchema = array(
+			'@context' => 'https://schema.org',
+			'@type' => 'BreadcrumbList',
+			'itemListElement' => $breadcrumbItems
+		);
+		
+		echo json_encode( $breadcrumbSchema, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES );
+	?>
+	</script>
+	
+	<?php if( !empty( $PageFunction ) ): ?>
+	<!-- TechArticle Schema for Function Pages -->
+	<script type="application/ld+json">
+	<?php
+		$articleSchema = array(
+			'@context' => 'https://schema.org',
+			'@type' => 'TechArticle',
+			'headline' => $PageFunction[ 'Function' ],
+			'description' => getTruncatedDescription( $PageFunction[ 'Comment' ], 160 ),
+			'url' => $BaseURL . $CurrentOpenFile . '/' . htmlspecialchars( $PageFunction[ 'Function' ] ),
+			'isPartOf' => array(
+				'@type' => 'WebSite',
+				'name' => $Project . ' Scripting API Reference',
+				'url' => $BaseURL
+			),
+			'author' => array(
+				'@type' => 'Organization',
+				'name' => 'AlliedModders'
+			),
+			'datePublished' => date( 'Y-m-d' )
+		);
+		
+		echo json_encode( $articleSchema, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES );
+	?>
+	</script>
+	<?php endif; ?>
 	
 	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.8/css/bootstrap.min.css">
 	<link rel="stylesheet" href="<?php echo $BaseURL; ?>style.css">
