@@ -24,10 +24,14 @@
 	// Initial popover initialization
 	initializePopovers();
 
+	// Create loading indicator
+	var loadingSpinner = $('<div class="spinner-border spinner-border-sm text-primary" id="loading-spinner" role="status" style="position: fixed; top: 10px; right: 10px; z-index: 9999; display: none;"><span class="visually-hidden">Loading...</span></div>');
+	$('body').append(loadingSpinner);
+
 	$(document)
 		.pjax('a', '#pjax-container')
-		.on('pjax:start', function () { NProgress.start(); })
-		.on('pjax:end', function () { NProgress.done(); initializePopovers(); })
+		.on('pjax:start', function () { $('#loading-spinner').show(); })
+		.on('pjax:end', function () { $('#loading-spinner').hide(); initializePopovers(); })
 		.on('pjax:clicked', function (ev) {
 			$('.function.active').removeClass('active');
 			$(ev.target).parent().addClass('active');
