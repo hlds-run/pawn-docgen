@@ -10,7 +10,9 @@
 	<li><a href="<?php echo $BaseURL . $CurrentOpenFile; ?>/__functions">Functions</a></li>
 </ol>
 
-<h3 class="border-bottom pb-2 mb-3">List of constants in <?php echo htmlspecialchars( $PageName ); ?>.inc</h3>
+<h1 class="border-bottom pb-2 mb-3">Constants in <?php echo htmlspecialchars( $PageName ); ?>.inc</h1>
+
+<h2>List of constants</h2>
 
 <?php
 	$InSection = 0;

@@ -10,7 +10,9 @@
 	<li><a href="<?php echo $BaseURL . $CurrentOpenFile; ?>">Constants</a></li>
 </ol>
 
-<h3 class="border-bottom pb-2 mb-3">List of functions in <?php echo htmlspecialchars( $CurrentOpenFile ); ?>.inc</h3>
+<h1 class="border-bottom pb-2 mb-3">Functions in <?php echo htmlspecialchars( $CurrentOpenFile ); ?>.inc</h1>
+
+<h2>List of functions</h2>
 
 <div class="table-responsive">
 	<table class="table table-bordered table-hover">

@@ -28,13 +28,13 @@
 	<li><a href="<?php echo $BaseURL . $CurrentOpenFile; ?>">Constants</a></li>
 </ol>
 
-<h3 class="border-bottom pb-2 mb-3"><?php echo htmlspecialchars( $PageFunction[ 'Function' ] ); ?></h3>
+<h1 class="border-bottom pb-2 mb-3"><?php echo htmlspecialchars( $PageFunction[ 'Function' ] ); ?></h1>
 
-<h4 class="sub-header2">Syntax</h4>
+<h2 class="sub-header2">Syntax</h2>
 <pre class="syntax"><?php echo htmlspecialchars( $PageFunction[ 'FullFunction' ] ); ?></pre>
 
 <?php if( !empty( $Parameters ) ): ?>
-<h4 class="sub-header2">Usage</h4>
+<h2 class="sub-header2">Usage</h2>
 <div class="table-responsive">
 	<table class="table table-bordered table-hover">
 		<thead>
@@ -53,8 +53,7 @@
 </div>
 <?php endif; ?>
 
-<h4 class="sub-header2">Description</h4>
-<pre class="description"><?php echo htmlspecialchars( $PageFunction[ 'Comment' ] ); ?></pre>
+<h2 class="sub-header2">Description</h2>
 
 <?php if( !empty( $OtherTags ) ): ?>
 <?php
@@ -64,7 +63,7 @@
 		{
 			case 'noreturn':
 			{
-				echo '<h4 class="sub-header2">Return</h4>';
+				echo '<h2 class="sub-header2">Return</h2>';
 				echo '<pre class="description">' . ( $PageFunction[ 'Type' ] === 'forward' ? 'This forward ignores the returned value.' : 'This function has no return value.' ) . '</pre>';
 				break;
 			}
@@ -83,7 +82,7 @@
 			}
 			default:
 			{
-				echo '<h4 class="sub-header2">' . ucfirst( $Tag[ 'Tag' ] ) . '</h4>';
+				echo '<h2 class="sub-header2">' . ucfirst( $Tag[ 'Tag' ] ) . '</h2>';
 				echo '<pre class="description">' . htmlspecialchars( $Tag[ 'Description' ] ) . '</pre>';
 			}
 		}
