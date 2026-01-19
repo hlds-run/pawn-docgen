@@ -1,8 +1,8 @@
 <?php
 	foreach( $Includes as $File )
 	{
-		echo '<h4 class="file"><a data-file="' . $File . '" href="' . $BaseURL . $File . '">' . $File . '</a></h4>';
-		echo '<div class="nav-functions ' . ( $CurrentOpenFile === $File ? ' show' : '' ) . '" id="file-' . $File . '">';
+		echo '<h4 class="file"><a data-file="' . $File . '" href="' . $BaseURL . $File . '" aria-label="Browse ' . $File . '.inc include file">' . $File . '</a></h4>';
+		echo '<div class="nav-functions ' . ( $CurrentOpenFile === $File ? ' show' : '' ) . '" id="file-' . $File . '" aria-label="Functions in ' . $File . '.inc">';
 		
 		if( !empty( $Functions[ $File ] ) )
 		{
@@ -22,13 +22,13 @@
 					
 					$OpenList = true;
 					
-					echo GetFunctionHeader( $Function[ 'Type' ] ) . '<div class="card-body"><ul class="nav nav-sidebar">';
+					echo GetFunctionHeader( $Function[ 'Type' ] ) . '<div class="card-body"><ul class="nav nav-sidebar" role="list">';
 				}
 				
 				$FunctionName = htmlspecialchars( $Function[ 'Function' ] );
 				
-				echo '<li class="function' . ( $CurrentOpenFunction === $FunctionName ? ' active' : '' ) . '" data-title="' . $FunctionName. '" data-content="' . htmlspecialchars( $Function[ 'Comment' ] ) . '">';
-				echo '<a href="' . $BaseURL . $File . '/' . urlencode( $Function[ 'Function' ] ) . '">' . $FunctionName . '</a>';
+				echo '<li class="function' . ( $CurrentOpenFunction === $FunctionName ? ' active' : '' ) . '" data-title="' . $FunctionName. '" data-content="' . htmlspecialchars( $Function[ 'Comment' ] ) . '" role="listitem">';
+				echo '<a href="' . $BaseURL . $File . '/' . urlencode( $Function[ 'Function' ] ) . '" aria-label="' . $FunctionName . ' - ' . $Function['Type'] . '">' . $FunctionName . '</a>';
 				echo '</li>';
 			}
 			
@@ -51,7 +51,7 @@
 		{
 			case 'forward': return '<div class="card border-info mb-2"><div class="card-header bg-info text-white">Forwards</div>';
 			case 'native': return '<div class="card border-success mb-2"><div class="card-header bg-success text-white">Natives</div>';
-			case 'stock': return '<div class="card border-warning mb-2"><div class="card-header bg-warning">Stocks</div>';
+			case 'stock': return '<div class="card border-warning mb-2"><div class="card-header bg-warning text-dark">Stocks</div>';
 			case 'functag': return '<div class="card border-danger mb-2"><div class="card-header bg-danger text-white">Functags</div>';
 		}
 		

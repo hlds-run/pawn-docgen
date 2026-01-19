@@ -201,18 +201,18 @@
 </head>
 <body data-baseurl="<?php echo $BaseURL; ?>">
 	<div class="mobile-header">
-		<button class="menu-toggle" aria-label="Toggle menu">☰</button>
+		<button class="menu-toggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="sidebar">☰</button>
 		<div class="header-link">
-			<a href="<?php echo $BaseURL; ?>"><?php echo $Project; ?> API</a>
+			<a href="<?php echo $BaseURL; ?>" aria-label="<?php echo $Project; ?> API Reference - Home"><?php echo $Project; ?> API</a>
 		</div>
 	</div>
 
-	<div class="sidebar">
+	<div class="sidebar" id="sidebar">
 		<div class="header-link">
-			<a href="<?php echo $BaseURL; ?>"><?php echo $Project; ?> API</a>
+			<a href="<?php echo $BaseURL; ?>" aria-label="<?php echo $Project; ?> API Reference - Home"><?php echo $Project; ?> API</a>
 		</div>
 		
-		<input class="form-control typeahead" type="text" placeholder="Search functions">
+		<input class="form-control typeahead" type="text" placeholder="Search functions" aria-label="Search for functions, constants, and symbols">
 		
 		<noscript>
 			<style>
@@ -237,7 +237,7 @@
 	
 	<div class="container-fluid">
 		<div class="row">
-			<div class="col-lg-12" id="pjax-container">
+			<main class="col-lg-12" id="pjax-container" role="main">
 <?php else: ?>
 <title><?php echo $Title; ?></title>
 <?php endif; ?>
