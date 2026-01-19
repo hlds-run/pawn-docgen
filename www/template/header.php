@@ -37,7 +37,20 @@
 		$MetaDescription = htmlspecialchars( $Project . ' Scripting API Reference - Browse functions, constants and symbols' );
 	}
 	
-	$Title = ( empty( $HeaderTitle ) ? '' : ( htmlspecialchars( $HeaderTitle ) . ' · ' ) ) . $Project . ' Scripting API Reference';
+	// Generate page title with pipe separators
+	if( !empty( $PageFunction ) ) {
+		// Function page: FunctionName | FileName | SiteName
+		$Title = htmlspecialchars( $PageFunction[ 'Function' ] ) . ' | ' . htmlspecialchars( $CurrentOpenFile ) . ' | ' . $Project;
+	} elseif( !empty( $CurrentOpenFile ) && isset( $_SERVER[ 'QUERY_STRING' ] ) && strpos( $_SERVER[ 'QUERY_STRING' ], '__functions' ) !== false ) {
+		// Functions list: FileName | SiteName
+		$Title = htmlspecialchars( $CurrentOpenFile ) . ' | ' . $Project;
+	} elseif( !empty( $CurrentOpenFile ) ) {
+		// Constants page: FileName | SiteName
+		$Title = htmlspecialchars( $CurrentOpenFile ) . ' | ' . $Project;
+	} else {
+		// Home page
+		$Title = $Project . ' Scripting API Reference';
+	}
 	
 	if( $RenderLayout ):
 ?>
