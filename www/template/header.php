@@ -47,15 +47,21 @@
 	}
 	
 	// Generate page title with pipe separators
+	// Determine OG type based on page
+	$OGType = 'website';
+	
 	if( !empty( $PageFunction ) ) {
 		// Function page: FunctionName | Functions | FileName | SiteName
 		$Title = htmlspecialchars( $PageFunction[ 'Function' ] ) . ' | Functions | ' . htmlspecialchars( $CurrentOpenFile ) . ' | ' . $Project;
+		$OGType = 'article';
 	} elseif( !empty( $IsRawView ) ) {
 		// Raw file view: File content | FileName | SiteName
 		$Title = 'File content | ' . htmlspecialchars( $CurrentOpenFile ) . ' | ' . $Project;
+		$OGType = 'article';
 	} elseif( !empty( $PageFunctions ) ) {
 		// Functions list page: Functions | FileName | SiteName
 		$Title = 'Functions | ' . htmlspecialchars( $CurrentOpenFile ) . ' | ' . $Project;
+		$OGType = 'website';
 	} elseif( !empty( $CurrentOpenFile ) ) {
 		// Constants page: Constants | FileName | SiteName
 		$Title = 'Constants | ' . htmlspecialchars( $CurrentOpenFile ) . ' | ' . $Project;
@@ -78,13 +84,18 @@
 	<meta property="og:title" content="<?php echo $Title; ?>">
 	<meta property="og:description" content="<?php echo $MetaDescription; ?>">
 	<meta property="og:url" content="<?php echo htmlspecialchars( $CurrentPageURL ?? $BaseURL ); ?>">
-	<meta property="og:type" content="<?php echo ( !empty( $PageFunction ) || !empty( $PageFunctions ) || !empty( $CurrentOpenFile ) ) ? 'website' : 'website'; ?>">
+	<meta property="og:type" content="<?php echo $OGType; ?>">
 	<meta property="og:site_name" content="<?php echo htmlspecialchars( $Project ); ?> Scripting API">
+	<meta property="og:locale" content="en_US">
 	
 	<!-- Twitter Card Meta Tags -->
 	<meta name="twitter:card" content="summary">
 	<meta name="twitter:title" content="<?php echo $Title; ?>">
 	<meta name="twitter:description" content="<?php echo $MetaDescription; ?>">
+	<meta name="twitter:site" content="@">
+	
+	<!-- Canonical URL -->
+	<link rel="canonical" href="<?php echo htmlspecialchars( $CurrentPageURL ?? $BaseURL ); ?>">
 	
 	<title><?php echo $Title; ?></title>
 	
