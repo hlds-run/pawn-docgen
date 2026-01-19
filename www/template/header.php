@@ -24,8 +24,8 @@
 	if( !empty( $PageFunction ) ) {
 		// Function page
 		$MetaDescription = getTruncatedDescription( $PageFunction[ 'Comment' ] );
-	} elseif( !empty( $CurrentOpenFile ) && isset( $_SERVER[ 'QUERY_STRING' ] ) && strpos( $_SERVER[ 'QUERY_STRING' ], '__functions' ) !== false ) {
-		// Functions list page
+	} elseif( !empty( $PageFunctions ) ) {
+		// Functions list page (either via __functions or redirected from empty constants)
 		$MetaDescription = 'List of functions in ' . htmlspecialchars( $CurrentOpenFile ) . '.inc file';
 	} elseif( !empty( $CurrentOpenFile ) ) {
 		// Constants page
@@ -39,14 +39,14 @@
 	
 	// Generate page title with pipe separators
 	if( !empty( $PageFunction ) ) {
-		// Function page: FunctionName | FileName | SiteName
-		$Title = htmlspecialchars( $PageFunction[ 'Function' ] ) . ' | ' . htmlspecialchars( $CurrentOpenFile ) . ' | ' . $Project;
-	} elseif( !empty( $CurrentOpenFile ) && isset( $_SERVER[ 'QUERY_STRING' ] ) && strpos( $_SERVER[ 'QUERY_STRING' ], '__functions' ) !== false ) {
-		// Functions list: FileName | SiteName
-		$Title = htmlspecialchars( $CurrentOpenFile ) . ' | ' . $Project;
+		// Function page: FunctionName | Functions | FileName | SiteName
+		$Title = htmlspecialchars( $PageFunction[ 'Function' ] ) . ' | Functions | ' . htmlspecialchars( $CurrentOpenFile ) . ' | ' . $Project;
+	} elseif( !empty( $PageFunctions ) ) {
+		// Functions list page: Functions | FileName | SiteName
+		$Title = 'Functions | ' . htmlspecialchars( $CurrentOpenFile ) . ' | ' . $Project;
 	} elseif( !empty( $CurrentOpenFile ) ) {
-		// Constants page: FileName | SiteName
-		$Title = htmlspecialchars( $CurrentOpenFile ) . ' | ' . $Project;
+		// Constants page: Constants | FileName | SiteName
+		$Title = 'Constants | ' . htmlspecialchars( $CurrentOpenFile ) . ' | ' . $Project;
 	} else {
 		// Home page
 		$Title = $Project . ' Scripting API Reference';

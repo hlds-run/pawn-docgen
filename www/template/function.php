@@ -25,6 +25,8 @@
 		<li class="breadcrumb-item"><a href="<?php echo $BaseURL . $CurrentOpenFile; ?>"><?php echo $CurrentOpenFile; ?>.inc</a></li>
 		<li class="breadcrumb-item"><a href="<?php echo $BaseURL . $CurrentOpenFile; ?>/__functions">Functions</a></li>
 		<li class="breadcrumb-item active" aria-current="page"><?php echo htmlspecialchars( $PageFunction[ 'Function' ] ); ?></li>
+		<li class="ms-auto"><a href="<?php echo $BaseURL . $CurrentOpenFile; ?>/__raw">File</a></li>
+		<li><a href="<?php echo $BaseURL . $CurrentOpenFile; ?>">Constants</a></li>
 	</ol>
 </nav>
 
@@ -54,6 +56,7 @@
 <?php endif; ?>
 
 <h2 class="sub-header2">Description</h2>
+<pre class="description"><?php echo htmlspecialchars( $PageFunction[ 'Comment' ] ); ?></pre>
 
 <?php if( !empty( $OtherTags ) ): ?>
 <?php
