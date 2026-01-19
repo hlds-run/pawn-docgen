@@ -89,7 +89,7 @@
 					echo '<ul>';
 					foreach( $TagList as $Tag )
 					{
-						echo '<li>' . htmlspecialchars( $Tag[ 'Description' ] ) . '</li>';
+						echo '<li><pre class="description">' . htmlspecialchars( $Tag[ 'Description' ] ) . '</pre></li>';
 					}
 					echo '</ul>';
 				}
