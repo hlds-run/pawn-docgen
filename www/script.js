@@ -24,14 +24,25 @@
 	// Initial popover initialization
 	initializePopovers();
 
-	// Create loading indicator
+	// Create progress bar and loading spinner indicators
+	var progressBar = $('<div id="loading-progress" class="progress" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="position: fixed; top: 0; left: 0; width: 100%; height: 3px; z-index: 9999; display: none;"><div class="progress-bar progress-bar-striped progress-bar-animated" style="width: 0%"></div></div>');
 	var loadingSpinner = $('<div class="spinner-border spinner-border-sm text-primary" id="loading-spinner" role="status" style="position: fixed; top: 10px; right: 10px; z-index: 9999; display: none;"><span class="visually-hidden">Loading...</span></div>');
-	$('body').append(loadingSpinner);
+	$('body').append(progressBar).append(loadingSpinner);
 
 	$(document)
 		.pjax('a', '#pjax-container')
-		.on('pjax:start', function () { $('#loading-spinner').show(); })
-		.on('pjax:end', function () { $('#loading-spinner').hide(); initializePopovers(); })
+		.on('pjax:start', function () { 
+			$('#loading-progress').show().find('.progress-bar').css('width', '30%');
+			$('#loading-spinner').show();
+		})
+		.on('pjax:end', function () { 
+			$('#loading-progress').find('.progress-bar').css('width', '100%').delay(500).fadeOut(300, function() {
+				$(this).css('width', '0%');
+				$('#loading-progress').hide();
+			});
+			$('#loading-spinner').hide(); 
+			initializePopovers();
+		})
 		.on('pjax:clicked', function (ev) {
 			$('.function.active').removeClass('active');
 			$(ev.target).parent().addClass('active');
