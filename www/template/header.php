@@ -64,6 +64,97 @@
 	
 	<title><?php echo $Title; ?></title>
 	
+	<!-- Schema.org Structured Data -->
+	<script type="application/ld+json">
+	<?php
+		// Generate breadcrumb schema
+		$breadcrumbItems = array();
+		$position = 1;
+		
+		// Add home
+		$breadcrumbItems[] = array(
+			'@type' => 'ListItem',
+			'position' => $position++,
+			'name' => $Project,
+			'item' => $BaseURL
+		);
+		
+		if( !empty( $CurrentOpenFile ) ) {
+			$breadcrumbItems[] = array(
+				'@type' => 'ListItem',
+				'position' => $position++,
+				'name' => $CurrentOpenFile . '.inc',
+				'item' => $BaseURL . $CurrentOpenFile
+			);
+		}
+		
+		if( !empty( $PageFunction ) ) {
+			$breadcrumbItems[] = array(
+				'@type' => 'ListItem',
+				'position' => $position++,
+				'name' => 'Functions',
+				'item' => $BaseURL . $CurrentOpenFile . '/__functions'
+			);
+			$breadcrumbItems[] = array(
+				'@type' => 'ListItem',
+				'position' => $position++,
+				'name' => $PageFunction[ 'Function' ],
+				'item' => $BaseURL . $CurrentOpenFile . '/' . htmlspecialchars( $PageFunction[ 'Function' ] )
+			);
+		} elseif( !empty( $CurrentOpenFile ) && isset( $_SERVER[ 'QUERY_STRING' ] ) && strpos( $_SERVER[ 'QUERY_STRING' ], '__functions' ) !== false ) {
+			$breadcrumbItems[] = array(
+				'@type' => 'ListItem',
+				'position' => $position++,
+				'name' => 'Functions',
+				'item' => $BaseURL . $CurrentOpenFile . '/__functions'
+			);
+		} elseif( !empty( $CurrentOpenFile ) ) {
+			$breadcrumbItems[] = array(
+				'@type' => 'ListItem',
+				'position' => $position++,
+				'name' => 'Constants',
+				'item' => $BaseURL . $CurrentOpenFile
+			);
+		}
+		
+		// Breadcrumb schema
+		$breadcrumbSchema = array(
+			'@context' => 'https://schema.org',
+			'@type' => 'BreadcrumbList',
+			'itemListElement' => $breadcrumbItems
+		);
+		
+		echo json_encode( $breadcrumbSchema, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES );
+	?>
+	</script>
+	
+	<?php if( !empty( $PageFunction ) ): ?>
+	<!-- TechArticle Schema for Function Pages -->
+	<script type="application/ld+json">
+	<?php
+		$articleSchema = array(
+			'@context' => 'https://schema.org',
+			'@type' => 'TechArticle',
+			'headline' => $PageFunction[ 'Function' ],
+			'description' => getTruncatedDescription( $PageFunction[ 'Comment' ], 160 ),
+			'url' => $BaseURL . $CurrentOpenFile . '/' . htmlspecialchars( $PageFunction[ 'Function' ] ),
+			'isPartOf' => array(
+				'@type' => 'WebSite',
+				'name' => $Project . ' Scripting API Reference',
+				'url' => $BaseURL
+			),
+			'author' => array(
+				'@type' => 'Organization',
+				'name' => 'AlliedModders'
+			),
+			'datePublished' => date( 'Y-m-d' )
+		);
+		
+		echo json_encode( $articleSchema, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES );
+	?>
+	</script>
+	<?php endif; ?>
+	
 	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.8/css/bootstrap.min.css">
 	<link rel="stylesheet" href="<?php echo $BaseURL; ?>style.css">
 </head>
