@@ -60,9 +60,16 @@
 
 <?php if( !empty( $OtherTags ) ): ?>
 <?php
+	// Group tags by type to handle multiple items of same type
+	$GroupedTags = Array();
 	foreach( $OtherTags as $Tag )
 	{
-		switch( $Tag[ 'Tag' ] )
+		$GroupedTags[ $Tag[ 'Tag' ] ][] = $Tag;
+	}
+	
+	foreach( $GroupedTags as $TagType => $Tags )
+	{
+		switch( $TagType )
 		{
 			case 'noreturn':
 			{
@@ -75,9 +82,9 @@
 				echo '<div class="alert alert-danger" role="alert" style="margin-top:20px">';
 				echo '<p>This function has been deprecated, do NOT use it</p>';
 				
-				if( !empty( $Tag[ 'Description' ] ) )
+				if( !empty( $Tags[0][ 'Description' ] ) )
 				{
-					echo '<p><strong>Reason:</strong> ' . htmlspecialchars( $Tag[ 'Description' ] ) . '</p>';
+					echo '<p><strong>Reason:</strong> ' . htmlspecialchars( $Tags[0][ 'Description' ] ) . '</p>';
 				}
 				
 				echo '</div>';
@@ -85,8 +92,23 @@
 			}
 			default:
 			{
-				echo '<h2 class="sub-header2">' . ucfirst( $Tag[ 'Tag' ] ) . '</h2>';
-				echo '<pre class="description">' . htmlspecialchars( $Tag[ 'Description' ] ) . '</pre>';
+				echo '<h2 class="sub-header2">' . ucfirst( $TagType ) . '</h2>';
+				
+				// If multiple items of same type, use list
+				if( count( $Tags ) > 1 )
+				{
+					echo '<ul>';
+					foreach( $Tags as $Tag )
+					{
+						echo '<li>' . htmlspecialchars( $Tag[ 'Description' ] ) . '</li>';
+					}
+					echo '</ul>';
+				}
+				else
+				{
+					// Single item - use pre
+					echo '<pre class="description">' . htmlspecialchars( $Tags[0][ 'Description' ] ) . '</pre>';
+				}
 			}
 		}
 	}

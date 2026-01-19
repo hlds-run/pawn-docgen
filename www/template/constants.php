@@ -72,13 +72,31 @@
 		{
 			echo '<div class="card-body">';
 			
+			// Group tags by type to handle multiple items of same type
+			$GroupedTags = Array();
 			foreach( $Tags as $Tag )
 			{
-				echo '<h4 class="sub-header2">' . ucfirst( $Tag[ 'Tag' ] ) . '</h4>';
+				$GroupedTags[ $Tag[ 'Tag' ] ][] = $Tag;
+			}
+			
+			foreach( $GroupedTags as $TagType => $TagList )
+			{
+				echo '<h4 class="sub-header2">' . ucfirst( $TagType ) . '</h4>';
 				
-				if( isset( $Tag[ 'Description' ] ) )
+				// If multiple items of same type, use list
+				if( count( $TagList ) > 1 )
 				{
-					echo '<pre class="description">' . htmlspecialchars( $Tag[ 'Description' ] ) . '</pre>';
+					echo '<ul>';
+					foreach( $TagList as $Tag )
+					{
+						echo '<li>' . htmlspecialchars( $Tag[ 'Description' ] ) . '</li>';
+					}
+					echo '</ul>';
+				}
+				else
+				{
+					// Single item - use pre
+					echo '<pre class="description">' . htmlspecialchars( $TagList[0][ 'Description' ] ) . '</pre>';
 				}
 			}
 			
