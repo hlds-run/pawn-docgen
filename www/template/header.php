@@ -1,4 +1,10 @@
 <?php
+	// Build full current page URL
+	$Scheme = isset( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] !== 'off' ? 'https' : 'http';
+	$Host = isset( $_SERVER['HTTP_HOST'] ) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'];
+	$RequestURI = isset( $_SERVER['REQUEST_URI'] ) ? $_SERVER['REQUEST_URI'] : '';
+	$CurrentPageURL = $Scheme . '://' . $Host . $RequestURI;
+	
 	// Meta description helper function
 	if( !function_exists( 'getTruncatedDescription' ) ) {
 		function getTruncatedDescription( $text, $maxLength = 160 ) {
@@ -41,15 +47,21 @@
 	}
 	
 	// Generate page title with pipe separators
+	// Determine OG type based on page
+	$OGType = 'website';
+	
 	if( !empty( $PageFunction ) ) {
 		// Function page: FunctionName | Functions | FileName | SiteName
 		$Title = htmlspecialchars( $PageFunction[ 'Function' ] ) . ' | Functions | ' . htmlspecialchars( $CurrentOpenFile ) . ' | ' . $Project;
+		$OGType = 'article';
 	} elseif( !empty( $IsRawView ) ) {
 		// Raw file view: File content | FileName | SiteName
 		$Title = 'File content | ' . htmlspecialchars( $CurrentOpenFile ) . ' | ' . $Project;
+		$OGType = 'article';
 	} elseif( !empty( $PageFunctions ) ) {
 		// Functions list page: Functions | FileName | SiteName
 		$Title = 'Functions | ' . htmlspecialchars( $CurrentOpenFile ) . ' | ' . $Project;
+		$OGType = 'website';
 	} elseif( !empty( $CurrentOpenFile ) ) {
 		// Constants page: Constants | FileName | SiteName
 		$Title = 'Constants | ' . htmlspecialchars( $CurrentOpenFile ) . ' | ' . $Project;
@@ -67,6 +79,27 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="description" content="<?php echo $MetaDescription; ?>">
+	
+	<!-- Open Graph Meta Tags -->
+	<meta property="og:title" content="<?php echo $Title; ?>">
+	<meta property="og:description" content="<?php echo $MetaDescription; ?>">
+	<meta property="og:url" content="<?php echo htmlspecialchars( $CurrentPageURL ?? $BaseURL ); ?>">
+	<meta property="og:type" content="<?php echo $OGType; ?>">
+	<meta property="og:site_name" content="<?php echo htmlspecialchars( $Project ); ?> Scripting API">
+	<meta property="og:locale" content="en_US">
+	
+	<!-- Twitter Card Meta Tags -->
+	<meta name="twitter:card" content="summary">
+	<meta name="twitter:title" content="<?php echo $Title; ?>">
+	<meta name="twitter:description" content="<?php echo $MetaDescription; ?>">
+	<meta name="twitter:site" content="@">
+	
+	<!-- Canonical URL -->
+	<link rel="canonical" href="<?php echo htmlspecialchars( $CurrentPageURL ?? $BaseURL ); ?>">
+	
+	<!-- Additional SEO Meta Tags -->
+	<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+	<meta name="theme-color" content="#0d6efd">
 	
 	<title><?php echo $Title; ?></title>
 	
@@ -153,7 +186,9 @@
 				'@type' => 'Organization',
 				'name' => 'AlliedModders'
 			),
-			'datePublished' => date( 'Y-m-d' )
+			'datePublished' => date( 'Y-m-d' ),
+			'proficiencyLevel' => 'Intermediate',
+			'keywords' => implode( ', ', array( $PageFunction[ 'Function' ], 'scripting', 'API', $CurrentOpenFile ) )
 		);
 		
 		echo json_encode( $articleSchema, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES );
