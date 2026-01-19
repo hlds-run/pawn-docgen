@@ -101,6 +101,12 @@
 	<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
 	<meta name="theme-color" content="#0d6efd">
 	
+	<!-- Favicon and App Icons -->
+	<link rel="icon" type="image/x-icon" href="<?php echo $BaseURL; ?>favicon.ico">
+	<link rel="icon" type="image/png" sizes="32x32" href="<?php echo $BaseURL; ?>favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="<?php echo $BaseURL; ?>favicon-16x16.png">
+	<link rel="apple-touch-icon" href="<?php echo $BaseURL; ?>apple-touch-icon.png">
+	
 	<title><?php echo $Title; ?></title>
 	
 	<!-- Schema.org Structured Data -->
