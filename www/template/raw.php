@@ -12,6 +12,8 @@
 	</ol>
 </nav>
 
+<article>
+
 <h1 class="border-bottom pb-2 mb-3">File content in <?php echo htmlspecialchars( $CurrentOpenFile ); ?>.inc</h1>
 
 <style>
@@ -61,6 +63,7 @@
 		document.head.appendChild(loaderScript);
 	})();
 </script>
+</article>
 
 <?php
 	require __DIR__ . '/footer.php';
