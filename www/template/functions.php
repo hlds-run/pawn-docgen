@@ -2,13 +2,13 @@
 	require __DIR__ . '/header.php';
 ?>
 
-<ol class="breadcrumb">
-	<li><a href="<?php echo $BaseURL . $CurrentOpenFile; ?>"><?php echo $CurrentOpenFile; ?>.inc</a></li>
-	<li class="active">Functions</li>
-	
-	<li class="ms-auto"><a href="<?php echo $BaseURL . $CurrentOpenFile; ?>/__raw">File</a></li>
-	<li><a href="<?php echo $BaseURL . $CurrentOpenFile; ?>">Constants</a></li>
-</ol>
+<nav aria-label="Breadcrumb">
+	<ol class="breadcrumb">
+		<li class="breadcrumb-item"><a href="<?php echo $BaseURL; ?>"><?php echo $Project; ?></a></li>
+		<li class="breadcrumb-item"><a href="<?php echo $BaseURL . $CurrentOpenFile; ?>"><?php echo $CurrentOpenFile; ?>.inc</a></li>
+		<li class="breadcrumb-item active" aria-current="page">Functions</li>
+	</ol>
+</nav>
 
 <h1 class="border-bottom pb-2 mb-3">Functions in <?php echo htmlspecialchars( $CurrentOpenFile ); ?>.inc</h1>
 
