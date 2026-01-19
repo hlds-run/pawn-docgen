@@ -33,6 +33,13 @@ try {
 		echo "\t\t<priority>0.6</priority>\n";
 		echo "\t</url>\n";
 		
+		// Raw file content - priority 0.8 (source code is important)
+		echo "\t<url>\n";
+		echo "\t\t<loc>" . htmlspecialchars( $BaseURLFull . $FileName . '/__raw' ) . "</loc>\n";
+		echo "\t\t<changefreq>monthly</changefreq>\n";
+		echo "\t\t<priority>0.8</priority>\n";
+		echo "\t</url>\n";
+		
 		// Functions list page - priority 0.7 (list of functions is important)
 		echo "\t<url>\n";
 		echo "\t\t<loc>" . htmlspecialchars( $BaseURLFull . $FileName . '/__functions' ) . "</loc>\n";
