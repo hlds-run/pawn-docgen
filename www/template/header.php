@@ -1,4 +1,10 @@
 <?php
+	// Build full current page URL
+	$Scheme = isset( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] !== 'off' ? 'https' : 'http';
+	$Host = isset( $_SERVER['HTTP_HOST'] ) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'];
+	$RequestURI = isset( $_SERVER['REQUEST_URI'] ) ? $_SERVER['REQUEST_URI'] : '';
+	$CurrentPageURL = $Scheme . '://' . $Host . $RequestURI;
+	
 	// Meta description helper function
 	if( !function_exists( 'getTruncatedDescription' ) ) {
 		function getTruncatedDescription( $text, $maxLength = 160 ) {
@@ -67,6 +73,18 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="description" content="<?php echo $MetaDescription; ?>">
+	
+	<!-- Open Graph Meta Tags -->
+	<meta property="og:title" content="<?php echo $Title; ?>">
+	<meta property="og:description" content="<?php echo $MetaDescription; ?>">
+	<meta property="og:url" content="<?php echo htmlspecialchars( $CurrentPageURL ?? $BaseURL ); ?>">
+	<meta property="og:type" content="<?php echo ( !empty( $PageFunction ) || !empty( $PageFunctions ) || !empty( $CurrentOpenFile ) ) ? 'website' : 'website'; ?>">
+	<meta property="og:site_name" content="<?php echo htmlspecialchars( $Project ); ?> Scripting API">
+	
+	<!-- Twitter Card Meta Tags -->
+	<meta name="twitter:card" content="summary">
+	<meta name="twitter:title" content="<?php echo $Title; ?>">
+	<meta name="twitter:description" content="<?php echo $MetaDescription; ?>">
 	
 	<title><?php echo $Title; ?></title>
 	
