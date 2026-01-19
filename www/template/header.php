@@ -1,4 +1,42 @@
 <?php
+	// Meta description helper function
+	if( !function_exists( 'getTruncatedDescription' ) ) {
+		function getTruncatedDescription( $text, $maxLength = 160 ) {
+			if( empty( $text ) ) {
+				return '';
+			}
+			$text = trim( str_replace( array( "\n", "\r", "\t" ), ' ', $text ) );
+			if( strlen( $text ) > $maxLength ) {
+				$text = substr( $text, 0, $maxLength );
+				$lastSpace = strrpos( $text, ' ' );
+				if( $lastSpace !== false ) {
+					$text = substr( $text, 0, $lastSpace );
+				}
+				$text .= '...';
+			}
+			return htmlspecialchars( $text, ENT_QUOTES, 'UTF-8' );
+		}
+	}
+	
+	// Determine meta description based on page type
+	$MetaDescription = '';
+	
+	if( !empty( $PageFunction ) ) {
+		// Function page
+		$MetaDescription = getTruncatedDescription( $PageFunction[ 'Comment' ] );
+	} elseif( !empty( $CurrentOpenFile ) && isset( $_SERVER[ 'QUERY_STRING' ] ) && strpos( $_SERVER[ 'QUERY_STRING' ], '__functions' ) !== false ) {
+		// Functions list page
+		$MetaDescription = 'List of functions in ' . htmlspecialchars( $CurrentOpenFile ) . '.inc file';
+	} elseif( !empty( $CurrentOpenFile ) ) {
+		// Constants page
+		$MetaDescription = 'Constants and symbols from ' . htmlspecialchars( $CurrentOpenFile ) . '.inc file';
+	}
+	
+	// Fallback to project description
+	if( empty( $MetaDescription ) ) {
+		$MetaDescription = htmlspecialchars( $Project . ' Scripting API Reference - Browse functions, constants and symbols' );
+	}
+	
 	$Title = ( empty( $HeaderTitle ) ? '' : ( htmlspecialchars( $HeaderTitle ) . ' · ' ) ) . $Project . ' Scripting API Reference';
 	
 	if( $RenderLayout ):
@@ -9,6 +47,7 @@
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="<?php echo $MetaDescription; ?>">
 	
 	<title><?php echo $Title; ?></title>
 	
