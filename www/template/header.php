@@ -101,9 +101,14 @@
 	<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
 	<meta name="theme-color" content="#0d6efd">
 	
-	<!-- Preload fonts to minimize CLS (Cumulative Layout Shift) -->
-	<link rel="preload" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;550;600&family=IBM+Plex+Mono:wght@400;500&display=swap" as="style">
-	
+	<!-- Preconnect + non-blocking stylesheet for Google Fonts to avoid unused-preload warning -->
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;550;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+	<noscript>
+		<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;550;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+	</noscript>
+
 	<title><?php echo $Title; ?></title>
 	
 	<!-- Schema.org Structured Data -->
