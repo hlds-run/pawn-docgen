@@ -5,7 +5,7 @@
 }
 
 .header-link > a {
-  color: #563d7c;
+  color: #2c1e47;
 }
 
 .sub-header {
@@ -53,28 +53,29 @@
 
 /* Links styling - be specific to not override other styles */
 a {
-  color: #0d6efd;
+  color: #0b5ed7;
   text-decoration: none;
+  font-weight: 550;
 }
 
 a:hover {
-  color: #0b5ed7;
+  color: #0a58ca;
   text-decoration: underline;
 }
 
 /* Specific link overrides */
 .file > a {
-  color: #999;
+  color: #555;
 }
 
 .file > a:hover {
-  color: #563d7c;
+  color: #2c1e47;
   text-decoration: none;
 }
 
 .breadcrumb > li a {
   text-decoration: none;
-  color: #0d6efd;
+  color: #0b5ed7;
 }
 
 .breadcrumb > li a:hover {
@@ -216,6 +217,40 @@ pre.syntax {
   border-color: #fcf8e3;
 }
 
+/* Bootstrap color contrast fixes for accessibility */
+.bg-info {
+  background-color: #0c63e4 !important;
+}
+
+.bg-info.text-white {
+  color: #fff !important;
+}
+
+.bg-success {
+  background-color: #198754 !important;
+}
+
+.bg-success.text-white {
+  color: #fff !important;
+}
+
+.bg-warning {
+  background-color: #ffc107 !important;
+}
+
+.bg-warning.text-dark {
+  color: #000 !important;
+  font-weight: 500;
+}
+
+.bg-danger {
+  background-color: #dc3545 !important;
+}
+
+.bg-danger.text-white {
+  color: #fff !important;
+}
+
 .container-fluid {
   /* slightly reduced padding for small screens */
   padding: 12px;
@@ -302,7 +337,7 @@ pre.syntax {
 }
 
 .breadcrumb > li.active {
-  color: #6c757d;
+  color: #495057;
 }
 
 /**
@@ -314,7 +349,7 @@ pre.syntax {
 }
 
 .tt-hint {
-  color: #999;
+  color: #666;
 }
 
 .tt-menu {
@@ -358,5 +393,71 @@ pre.syntax {
 @media (prefers-color-scheme: dark) {
   html {
     filter: invert(0.85) hue-rotate(180deg);
+  }
+}
+
+/* =========================================================
+	 Accessibility: Focus Styles
+	 ========================================================= */
+
+/* Only show focus outline when using keyboard navigation (focus-visible) */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid #0b5ed7;
+  outline-offset: 2px;
+}
+
+/* Remove default blue outline for mouse clicks */
+a:focus:not(:focus-visible),
+button:focus:not(:focus-visible),
+input:focus:not(:focus-visible),
+textarea:focus:not(:focus-visible),
+select:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Enhanced focus for interactive elements */
+.function:focus-visible {
+  outline: 2px solid #0b5ed7;
+  outline-offset: 1px;
+  border-radius: 2px;
+}
+
+.function:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.nav-sidebar > li > a:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: -2px;
+}
+
+.nav-sidebar > li > a:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Respect user's motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  a:focus-visible,
+  a:focus-visible,
+  button:focus-visible,
+  button:focus-visible,
+  input:focus-visible,
+  input:focus-visible,
+  textarea:focus-visible,
+  textarea:focus-visible,
+  select:focus-visible,
+  select:focus-visible,
+  .function:focus-visible {
+    outline: 1px solid #0b5ed7;
+    outline-offset: 1px;
+  }
+
+  .nav-sidebar > li > a:focus-visible {
+    outline: 1px solid #fff;
+    outline-offset: -1px;
   }
 }

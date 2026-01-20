@@ -30,10 +30,12 @@
 	</ol>
 </nav>
 
+<article>
+
 <h1 class="border-bottom pb-2 mb-3"><?php echo htmlspecialchars( $PageFunction[ 'Function' ] ); ?></h1>
 
 <h2 class="sub-header2">Syntax</h2>
-<pre class="syntax"><?php echo htmlspecialchars( $PageFunction[ 'FullFunction' ] ); ?></pre>
+<pre class="syntax" aria-label="Function syntax"><code><?php echo htmlspecialchars( $PageFunction[ 'FullFunction' ] ); ?></code></pre>
 
 <?php if( !empty( $Parameters ) ): ?>
 <h2 class="sub-header2">Usage</h2>
@@ -114,6 +116,7 @@
 	}
 ?>
 <?php endif; ?>
+</article>
 
 <?php
 	require __DIR__ . '/footer.php';

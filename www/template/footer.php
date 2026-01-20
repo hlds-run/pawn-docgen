@@ -1,9 +1,9 @@
 <?php if( $RenderLayout ): ?>
-			</div>
+			</main>
 			
-			<div class="col-lg-12 footer">
+			<footer class="col-lg-12 footer">
 				<p>This documentation was generated automatically using <a href="https://github.com/alliedmodders/pawn-docgen">pawn-docgen</a> written by <a href="//xpaw.me">xPaw</a> for <a href="//alliedmods.net/">AlliedMods</a>.</p>
-			</div>
+			</footer>
 		</div>
 	</div>
 	

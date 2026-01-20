@@ -12,6 +12,8 @@
 	</ol>
 </nav>
 
+<article>
+
 <h1 class="border-bottom pb-2 mb-3">Constants in <?php echo htmlspecialchars( $PageName ); ?>.inc</h1>
 
 <h2>List of constants</h2>
@@ -32,7 +34,7 @@
 			$Slug = StringToSlug( $Result[ 'Comment' ] );
 			
 			echo '<div class="card card-info mb-3" id="' . $Slug . '">';
-			echo '<div class="card-header bg-info text-white">' . htmlspecialchars( substr( $Result[ 'Comment' ], 9 ) ) . '<a href="#' . $Slug . '" class="permalink float-end">#</a></div>';
+			echo '<div class="card-header bg-info text-white">' . htmlspecialchars( substr( $Result[ 'Comment' ], 9 ) ) . '<a href="#' . $Slug . '" class="permalink float-end" aria-label="Copy link to this section">#</a></div>';
 			
 			if( Empty( $Tags ) && Empty( $Result[ 'Constant' ] ) )
 			{
@@ -63,7 +65,7 @@
 			$Slug = StringToSlug( $Result[ 'Comment' ] );
 			
 			echo '<div class="card card-primary mb-3" id="' . $Slug . '">';
-			echo '<div class="card-header bg-primary text-white">' . htmlspecialchars( $Result[ 'Comment' ] ) . '<a href="#' . $Slug . '" class="permalink float-end">#</a></div>';
+			echo '<div class="card-header bg-primary text-white">' . htmlspecialchars( $Result[ 'Comment' ] ) . '<a href="#' . $Slug . '" class="permalink float-end" aria-label="Copy link to ' . htmlspecialchars( $Result['Comment'] ) . '">#</a></div>';
 			
 			$ClosePanel = true;
 		}
@@ -81,7 +83,7 @@
 			
 			foreach( $GroupedTags as $TagType => $TagList )
 			{
-				echo '<h4 class="sub-header2">' . ucfirst( $TagType ) . '</h4>';
+				echo '<h3 class="sub-header2">' . ucfirst( $TagType ) . '</h3>';
 				
 				// If multiple items of same type, use list
 				if( count( $TagList ) > 1 )
@@ -124,6 +126,7 @@
 		echo '</div>';
 	}
 ?>
+</article>
 
 <?php
 	require __DIR__ . '/footer.php';
