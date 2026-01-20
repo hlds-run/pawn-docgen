@@ -101,6 +101,9 @@
 	<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
 	<meta name="theme-color" content="#0d6efd">
 	
+	<!-- Preload fonts to minimize CLS (Cumulative Layout Shift) -->
+	<link rel="preload" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;550;600&family=IBM+Plex+Mono:wght@400;500&display=swap" as="style">
+	
 	<title><?php echo $Title; ?></title>
 	
 	<!-- Schema.org Structured Data -->
