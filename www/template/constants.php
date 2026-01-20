@@ -107,7 +107,7 @@
 		
 		if( !Empty( $Result[ 'Constant' ] ) )
 		{
-			echo '<div class="card-footer"><pre class="description">' . htmlspecialchars( $Result[ 'Constant' ] ) . '</pre></div>';
+			echo '<div class="card-footer"><pre class="description"><code class="language-clike">' . htmlspecialchars( $Result[ 'Constant' ] ) . '</code></pre></div>';
 		}
 		
 		if( $ClosePanel )
