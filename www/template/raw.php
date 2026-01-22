@@ -32,9 +32,9 @@
 		var content = <?php echo json_encode( $PageFile['Content'] ); ?>;
 		// Load Monaco's AMD loader from CDN
 		var loaderScript = document.createElement('script');
-		loaderScript.src = 'https://unpkg.com/monaco-editor@0.55.1/min/vs/loader.js';
+		loaderScript.src = '//cdn.jsdelivr.net/npm/monaco-editor@0.55.1/min/vs/loader.min.js';
 		loaderScript.onload = function() {
-			require.config({ paths: { 'vs': 'https://unpkg.com/monaco-editor@0.55.1/min/vs' } });
+			require.config({ paths: { 'vs': 'https://cdn.jsdelivr.net/npm/monaco-editor@0.55.1/min/vs' } });
 			require(['vs/editor/editor.main'], function() {
 				try {
 					monaco.editor.create(document.getElementById('editor'), {
