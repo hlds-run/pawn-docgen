@@ -204,7 +204,7 @@
 	</script>
 	<?php endif; ?>
 	
-	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.8/css/bootstrap.min.css">
+	<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
 	<link rel="stylesheet" href="<?php echo $BaseURL; ?>style.css">
 </head>
 <body data-baseurl="<?php echo $BaseURL; ?>">
