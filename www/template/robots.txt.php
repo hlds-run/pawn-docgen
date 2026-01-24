@@ -5,7 +5,8 @@
  */
 
 // Build absolute URL for sitemap
-$Scheme = isset( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] !== 'off' ? 'https' : 'http';
+// $Scheme = isset( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] !== 'off' ? 'https' : 'http';
+$Scheme = 'https';
 $Host = isset( $_SERVER['HTTP_HOST'] ) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'];
 $SitemapURL = $Scheme . '://' . $Host . rtrim( $GLOBALS['BaseURL'], '/' ) . '/sitemap.xml';
 

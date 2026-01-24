@@ -4,7 +4,8 @@
  * Generates XML sitemap for search engines with proper priorities
  */
 
-$Scheme = isset( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] !== 'off' ? 'https' : 'http';
+// $Scheme = isset( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] !== 'off' ? 'https' : 'http';
+$Scheme = 'https';
 $Host = isset( $_SERVER['HTTP_HOST'] ) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'];
 $BaseURLFull = $Scheme . '://' . $Host . rtrim( $GLOBALS['BaseURL'], '/' ) . '/';
 
