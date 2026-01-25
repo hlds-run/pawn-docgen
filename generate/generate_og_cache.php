@@ -83,13 +83,15 @@ try {
     
     foreach ($functions as $func) {
         $title = trim((string)$func['Function']);
-        $subtitle = trim((string)$func['Type']) . ' · ' . trim((string)$func['IncludeName']);
         $comment = trim((string)$func['Comment']);
         
         // Limit comment length for display
         if (strlen($comment) > 100) {
             $comment = substr($comment, 0, 100) . '...';
         }
+        
+        // Use the function comment as subtitle instead of type
+        $subtitle = !empty($comment) ? $comment : $func['Type'] . ' · ' . $func['IncludeName'];
         
         $params = [
             'title' => $title,
@@ -177,39 +179,27 @@ try {
  * Generates an image and saves it to the specified file
  */
 function generateAndSaveImage(array $params, string $output_file): void {
-    // ==================================================
-    // Image size (OpenGraph стандарт)
-    // ==================================================
+    // Image size (OpenGraph standard)
     $W = 1200;
     $H = 630;
 
-    // ==================================================
     // Fonts
-    // ==================================================
-    // Попробуем различные возможные пути к шрифтам
-    $possibleFontPaths = [
-        // Путь в контейнере для веб-сервера (где на самом деле находятся шрифты)
-        '/var/www/html/assets/fonts/',
-        // Путь из контейнера
-        '/srv/pawn-docgen/www/assets/fonts/',
-        // Путь относительно текущего файла
+    $fontDirs = [
         __DIR__ . '/../www/assets/fonts/',
-        // Путь относительно корня приложения
-        dirname(__DIR__, 3) . '/www/assets/fonts/',
-        // Путь в текущем рабочем каталоге
-        getcwd() . '/www/assets/fonts/',
-        // Абсолютный путь внутри контейнера
-        '/var/www/html/www/assets/fonts/'
+        __DIR__ . '/../../www/assets/fonts/',
+        __DIR__ . '/../../../www/assets/fonts/',
+        '/var/www/html/assets/fonts/',
+        '/srv/pawn-docgen/www/assets/fonts/'
     ];
 
     $fontRegular = null;
     $fontSemi = null;
     
-    foreach ($possibleFontPaths as $fontDir) {
+    foreach ($fontDirs as $fontDir) {
         $fontDir = rtrim($fontDir, '/') . '/';
         $regularPath = $fontDir . 'IBMPlexSans-Regular.ttf';
         $semiPath = $fontDir . 'IBMPlexSans-SemiBold.ttf';
-        
+
         if (is_readable($regularPath) && is_readable($semiPath)) {
             $fontRegular = $regularPath;
             $fontSemi = $semiPath;
@@ -224,41 +214,35 @@ function generateAndSaveImage(array $params, string $output_file): void {
     // Extract parameters
     $title = $params['title'] ?? 'register_plugin';
     $subtitle = $params['subtitle'] ?? 'AMX Mod X native';
-    $tag = $params['tag'] ?? 'Pawn';
+    $tag = $params['tag'] ?? 'Function';
     $theme = $params['theme'] ?? 'light';
 
-    // ==================================================
     // Image base
-    // ==================================================
     $im = imagecreatetruecolor($W, $H);
     imageantialias($im, true);
 
-    // ==================================================
     // Colors (derived from site CSS)
-    // ==================================================
     if ($theme === 'dark') {
-        $bg        = imagecolorallocate($im, 20, 16, 32);
-        $cardBg   = imagecolorallocate($im, 30, 24, 48);
-        $primary  = imagecolorallocate($im, 230, 230, 240);
-        $muted    = imagecolorallocate($im, 160, 160, 180);
-        $accent   = imagecolorallocate($im, 88, 140, 255);
-        $border   = imagecolorallocate($im, 50, 45, 70);
-        $white    = imagecolorallocate($im, 255, 255, 255);
+        $bg       = imagecolorallocate($im, 20, 16, 32);
+        $cardBg  = imagecolorallocate($im, 30, 24, 48);
+        $primary = imagecolorallocate($im, 230, 230, 240);
+        $muted   = imagecolorallocate($im, 160, 160, 180);
+        $accent  = imagecolorallocate($im, 88, 140, 255);
+        $border  = imagecolorallocate($im, 50, 45, 70);
+        $white   = imagecolorallocate($im, 255, 255, 255);
     } else {
-        $bg        = imagecolorallocate($im, 245, 246, 250);
-        $cardBg   = imagecolorallocate($im, 255, 255, 255);
-        $primary  = imagecolorallocate($im, 44, 30, 71);   // #2c1e47
-        $muted    = imagecolorallocate($im, 120, 120, 120);
-        $accent   = imagecolorallocate($im, 11, 94, 215);  // #0b5ed7
-        $border   = imagecolorallocate($im, 230, 230, 230);
-        $white    = imagecolorallocate($im, 255, 255, 255);
+        $bg       = imagecolorallocate($im, 245, 246, 250);
+        $cardBg  = imagecolorallocate($im, 255, 255, 255);
+        $primary = imagecolorallocate($im, 44, 30, 71);   // #2c1e47
+        $muted   = imagecolorallocate($im, 120, 120, 120);
+        $accent  = imagecolorallocate($im, 11, 94, 215);  // #0b5ed7
+        $border  = imagecolorallocate($im, 230, 230, 230);
+        $white   = imagecolorallocate($im, 255, 255, 255);
     }
 
     imagefill($im, 0, 0, $bg);
 
-    // ==================================================
     // Card layout
-    // ==================================================
     $cardX = 60;
     $cardY = 60;
     $cardW = $W - 120;
@@ -268,40 +252,20 @@ function generateAndSaveImage(array $params, string $output_file): void {
     imagerectangle($im, $cardX, $cardY, $cardX + $cardW, $cardY + $cardH, $border);
 
     // Accent stripe
-    imagefilledrectangle(
-        $im,
-        $cardX,
-        $cardY,
-        $cardX + 10,
-        $cardY + $cardH,
-        $accent
-    );
+    imagefilledrectangle($im, $cardX, $cardY, $cardX + 10, $cardY + $cardH, $accent);
 
-    // ==================================================
     // Tag badge
-    // ==================================================
     $tagX = $cardX + 40;
     $tagY = $cardY + 40;
     $tagW = 140;
     $tagH = 36;
 
     roundedRect($im, $tagX, $tagY, $tagW, $tagH, 18, $accent);
-    imagettftext(
-        $im,
-        16,
-        0,
-        $tagX + 20,
-        $tagY + 24,
-        $white,
-        $fontSemi,
-        $tag
-    );
+    imagettftext($im, 16, 0, $tagX + 20, $tagY + 24, $white, $fontSemi, $tag);
 
-    // ==================================================
     // Title with adaptive font size
-    // ==================================================
     $textX = $cardX + 40;
-    $titleY = $cardY + 130; // Начальная Y-позиция заголовка
+    $titleY = $cardY + 130;
     $maxTextWidth = $cardW - 80;
 
     // Calculate initial font size for title
@@ -312,7 +276,7 @@ function generateAndSaveImage(array $params, string $output_file): void {
 
     // Reduce font size if title is too wide
     while ($titleWidth > $maxTextWidth && $fontSize > 24) {
-        $fontSize -= 1;
+        $fontSize--;
         $titleBox = imagettfbbox($fontSize, 0, $fontSemi, $title);
         $titleWidth = $titleBox[2] - $titleBox[0];
     }
@@ -332,21 +296,19 @@ function generateAndSaveImage(array $params, string $output_file): void {
         $maxTitleLines
     );
 
-    // ==================================================
     // Subtitle with adaptive font size and wrapping
-    // ==================================================
-    $subtitleY = $titleMaxY + 55; // ⬅️ ФИКС: всегда +25px от нижней границы заголовка
+    $subtitleY = $titleMaxY + 55; // Always +25px from bottom of title
     $subtitleFontSize = 20;
     $subtitleMaxLines = 10;
     $subtitleLineHeight = 28;
 
-    // Проверяем, есть ли место для subtitle до футера
+    // Check if there's space for subtitle before footer
     $footerHeight = 40;
     $footerY = $cardY + $cardH - 40;
     $maxSubtitleHeight = $footerY - $subtitleY - 30;
     $availableLinesForSubtitle = floor($maxSubtitleHeight / $subtitleLineHeight);
 
-    // Ограничиваем количество строк subtitle
+    // Limit number of subtitle lines
     $subtitleMaxLines = (int)min($subtitleMaxLines, $availableLinesForSubtitle, 8);
 
     list($subtitleLinesCount, $subtitleMaxY) = ttfWrap(
@@ -358,26 +320,14 @@ function generateAndSaveImage(array $params, string $output_file): void {
         $subtitleLineHeight,
         $muted,
         $fontRegular,
+        $subtitle,  // Add the missing subtitle text parameter
         $subtitleMaxLines
     );
 
-    // ==================================================
     // Footer
-    // ==================================================
-    imagettftext(
-        $im,
-        18,
-        0,
-        $cardX + $cardW - 260,
-        $cardY + $cardH - 40,
-        $muted,
-        $fontSemi,
-        'pawn-docgen'
-    );
+    imagettftext($im, 18, 0, $cardX + $cardW - 260, $cardY + $cardH - 40, $muted, $fontSemi, 'pawn-docgen');
 
-    // ==================================================
     // Save image to file
-    // ==================================================
     imagepng($im, $output_file);
     imagedestroy($im);
 }

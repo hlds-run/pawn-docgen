@@ -268,8 +268,8 @@ list($subtitleLinesCount, $subtitleMaxY) = ttfWrap(
     $subtitleLineHeight,
     $muted,
     $fontRegular,
-    $subtitle,
-    $subtitleMaxLines
+    $subtitle,  // Текст сабтайтла
+    $subtitleMaxLines  // Максимальное количество строк
 );
 
 // Debug: границы области subtitle

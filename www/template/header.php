@@ -5,6 +5,13 @@
 	$RequestURI = isset( $_SERVER['REQUEST_URI'] ) ? $_SERVER['REQUEST_URI'] : '';
 	$CurrentPageURL = $Scheme . '://' . $Host . $RequestURI;
 	
+	// Ensure BaseURL is properly defined as absolute URL
+	if( !isset( $BaseURL ) || empty( $BaseURL ) ) {
+		$BaseURL = $Scheme . '://' . $Host . dirname( dirname( $_SERVER['SCRIPT_NAME'] ) ) . '/';
+		// Normalize the BaseURL to ensure it ends with a slash
+		$BaseURL = rtrim( $BaseURL, '/' ) . '/';
+	}
+	
 	// Meta description helper function
 	if( !function_exists( 'getTruncatedDescription' ) ) {
 		function getTruncatedDescription( $text, $maxLength = 160 ) {
@@ -70,44 +77,73 @@
 		$Title = $Project . ' Scripting API Reference';
 	}
 	
-	// Generate OG image URL based on page type
-	$OGImageURL = $BaseURL . 'template/card.png.php?';
+	// Generate OG image URL based on page type - use cached file if it exists, otherwise use dynamic generator
+	$OGImageParams = array();
 	
 	if( !empty( $PageFunction ) ) {
-		// Function page
+		// Function page - use function comment as subtitle instead of function type
+		$comment = trim((string)$PageFunction['Comment']);
+		if (strlen($comment) > 100) {
+			$comment = substr($comment, 0, 100) . '...';
+		}
+		$subtitle = !empty($comment) ? $comment : $PageFunction['Type'] . ' · ' . $CurrentOpenFile;
+		
 		$OGImageParams = array(
-			'title' => urlencode($PageFunction[ 'Function' ]),
-			'subtitle' => urlencode($PageFunction[ 'Type' ] . ' · ' . $CurrentOpenFile),
+			'title' => $PageFunction[ 'Function' ],
+			'subtitle' => $subtitle,
 			'tag' => 'Function',
 			'theme' => 'light'
 		);
 	} elseif( !empty( $CurrentOpenFile ) && !empty( $PageFunctions ) ) {
 		// Functions list page
 		$OGImageParams = array(
-			'title' => urlencode('Functions'),
-			'subtitle' => urlencode($CurrentOpenFile . '.inc'),
+			'title' => 'Functions',
+			'subtitle' => $CurrentOpenFile . '.inc',
 			'tag' => 'Functions',
 			'theme' => 'light'
 		);
 	} elseif( !empty( $CurrentOpenFile ) ) {
 		// Constants page
 		$OGImageParams = array(
-			'title' => urlencode('Constants'),
-			'subtitle' => urlencode($CurrentOpenFile . '.inc'),
+			'title' => 'Constants',
+			'subtitle' => $CurrentOpenFile . '.inc',
 			'tag' => 'Constants',
 			'theme' => 'light'
 		);
 	} else {
 		// Home page
 		$OGImageParams = array(
-			'title' => urlencode($Project),
+			'title' => $Project,
 			'subtitle' => 'Scripting API Reference',
 			'tag' => 'API',
 			'theme' => 'light'
 		);
 	}
 	
-	$OGImageURL .= http_build_query($OGImageParams);
+	// Create cache key based on parameters
+	// Determine appropriate prefix based on page type to match generate_og_cache.php
+	if( !empty( $PageFunction ) ) {
+		$cache_prefix = 'func_';
+	} elseif( !empty( $CurrentOpenFile ) && !empty( $PageFunctions ) ) {
+		$cache_prefix = 'func_'; // Functions list page
+	} elseif( !empty( $CurrentOpenFile ) ) {
+		$cache_prefix = 'const_'; // Constants page
+	} else {
+		$cache_prefix = 'file_'; // Home page
+	}
+	
+	$cache_key = $cache_prefix . md5(serialize($OGImageParams));
+	$cache_dir = __DIR__ . '/../../cache/og_images/';
+	$cache_file = $cache_dir . $cache_key . '.png';
+	
+	// Check if cached image exists
+	if (file_exists($cache_file)) {
+		// Use cached image file - ensure absolute URL
+		$OGImageURL = $BaseURL . 'cache/og_images/' . $cache_key . '.png';
+	} else {
+		// Fall back to dynamic generator - ensure absolute URL
+		$OGImageURL = $BaseURL . 'template/card.png.php?' . http_build_query($OGImageParams);
+	}
 	
 	if( $RenderLayout ):
 ?>
