@@ -57,7 +57,7 @@
 	} elseif( !empty( $IsRawView ) ) {
 		// Raw file view: File content | FileName | SiteName
 		$Title = 'File content | ' . htmlspecialchars( $CurrentOpenFile ) . ' | ' . $Project;
-		$OGType = 'article';
+	$OGType = 'article';
 	} elseif( !empty( $PageFunctions ) ) {
 		// Functions list page: Functions | FileName | SiteName
 		$Title = 'Functions | ' . htmlspecialchars( $CurrentOpenFile ) . ' | ' . $Project;
@@ -69,6 +69,45 @@
 		// Home page
 		$Title = $Project . ' Scripting API Reference';
 	}
+	
+	// Generate OG image URL based on page type
+	$OGImageURL = $BaseURL . 'template/card.png.php?';
+	
+	if( !empty( $PageFunction ) ) {
+		// Function page
+		$OGImageParams = array(
+			'title' => urlencode($PageFunction[ 'Function' ]),
+			'subtitle' => urlencode($PageFunction[ 'Type' ] . ' · ' . $CurrentOpenFile),
+			'tag' => 'Function',
+			'theme' => 'light'
+		);
+	} elseif( !empty( $CurrentOpenFile ) && !empty( $PageFunctions ) ) {
+		// Functions list page
+		$OGImageParams = array(
+			'title' => urlencode('Functions'),
+			'subtitle' => urlencode($CurrentOpenFile . '.inc'),
+			'tag' => 'Functions',
+			'theme' => 'light'
+		);
+	} elseif( !empty( $CurrentOpenFile ) ) {
+		// Constants page
+		$OGImageParams = array(
+			'title' => urlencode('Constants'),
+			'subtitle' => urlencode($CurrentOpenFile . '.inc'),
+			'tag' => 'Constants',
+			'theme' => 'light'
+		);
+	} else {
+		// Home page
+		$OGImageParams = array(
+			'title' => urlencode($Project),
+			'subtitle' => 'Scripting API Reference',
+			'tag' => 'API',
+			'theme' => 'light'
+		);
+	}
+	
+	$OGImageURL .= http_build_query($OGImageParams);
 	
 	if( $RenderLayout ):
 ?>
@@ -83,15 +122,19 @@
 	<!-- Open Graph Meta Tags -->
 	<meta property="og:title" content="<?php echo $Title; ?>">
 	<meta property="og:description" content="<?php echo $MetaDescription; ?>">
+	<meta property="og:image" content="<?php echo htmlspecialchars( $OGImageURL ); ?>">
+	<meta property="og:image:width" content="1200">
+	<meta property="og:image:height" content="630">
 	<meta property="og:url" content="<?php echo htmlspecialchars( $CurrentPageURL ?? $BaseURL ); ?>">
 	<meta property="og:type" content="<?php echo $OGType; ?>">
 	<meta property="og:site_name" content="<?php echo htmlspecialchars( $Project ); ?> Scripting API">
 	<meta property="og:locale" content="en_US">
 	
 	<!-- Twitter Card Meta Tags -->
-	<meta name="twitter:card" content="summary">
+	<meta name="twitter:card" content="summary_large_image">
 	<meta name="twitter:title" content="<?php echo $Title; ?>">
 	<meta name="twitter:description" content="<?php echo $MetaDescription; ?>">
+	<meta name="twitter:image" content="<?php echo htmlspecialchars( $OGImageURL ); ?>">
 	<meta name="twitter:site" content="@">
 	
 	<!-- Canonical URL -->

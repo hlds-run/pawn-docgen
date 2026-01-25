@@ -1,7 +1,32 @@
 <?php
 declare(strict_types=1);
 
-header('Content-Type: image/png');
+// Generate cache key based on parameters
+$params = [
+    'title' => $_GET['title'] ?? 'register_plugin',
+    'subtitle' => $_GET['subtitle'] ?? 'AMX Mod X native',
+    'tag' => $_GET['tag'] ?? 'Pawn',
+    'theme' => $_GET['theme'] ?? 'light'
+];
+
+$cache_key = md5(serialize($params));
+$cache_dir = __DIR__ . '/../../cache/og_images/';
+$cache_file = $cache_dir . $cache_key . '.png';
+
+// Check if cached image exists and return it directly
+if (file_exists($cache_file)) {
+    header('Content-Type: image/png');
+    readfile($cache_file);
+    exit;
+}
+
+// Create cache directory if it doesn't exist
+if (!is_dir($cache_dir)) {
+    mkdir($cache_dir, 0755, true);
+}
+
+// Get debug flag
+$debug = isset($_GET['debug']);
 
 // ==================================================
 // Image size (OpenGraph стандарт)
@@ -17,20 +42,27 @@ $fontDir = realpath(__DIR__ . '/../assets/fonts');
 $fontRegular = $fontDir . '/IBMPlexSans-Regular.ttf';
 $fontSemi    = $fontDir . '/IBMPlexSans-SemiBold.ttf';
 
+// Проверяем оба возможных пути к шрифтам
 if (!is_readable($fontRegular) || !is_readable($fontSemi)) {
-    http_response_code(500);
-    exit('Font files not found');
+    // Если шрифты не найдены в текущем пути, пробуем другой путь
+    $fontDir = realpath(__DIR__ . '/../../www/assets/fonts');
+    $fontRegular = $fontDir . '/IBMPlexSans-Regular.ttf';
+    $fontSemi    = $fontDir . '/IBMPlexSans-SemiBold.ttf';
+    
+    if (!is_readable($fontRegular) || !is_readable($fontSemi)) {
+        http_response_code(500);
+        exit('Font files not found');
+    }
 }
 
 // ==================================================
 // Query params
 // ==================================================
 
-$title    = trim((string)($_GET['title'] ?? 'register_plugin'));
-$subtitle = trim((string)($_GET['subtitle'] ?? 'AMX Mod X native'));
-$tag      = trim((string)($_GET['tag'] ?? 'Pawn'));
-$theme    = $_GET['theme'] ?? 'light';
-$debug    = isset($_GET['debug']);
+$title    = trim((string)($params['title']));
+$subtitle = trim((string)($params['subtitle']));
+$tag      = trim((string)($params['tag']));
+$theme    = $params['theme'];
 
 // ==================================================
 // Image base
@@ -270,5 +302,7 @@ if ($debug) {
 // ==================================================
 // Output
 // ==================================================
+header('Content-Type: image/png');
+imagepng($im, $cache_file); // Save to cache
 imagepng($im);
 imagedestroy($im);
