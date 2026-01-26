@@ -133,7 +133,7 @@
 	}
 	
 	$cache_key = $cache_prefix . md5(serialize($OGImageParams));
-	$cache_dir = __DIR__ . '/../../cache/og_images/';
+	$cache_dir = '/var/www/html/cache/og_images/';
 	$cache_file = $cache_dir . $cache_key . '.png';
 	
 	// Check if cached image exists
@@ -158,7 +158,14 @@
 	<!-- Open Graph Meta Tags -->
 	<meta property="og:title" content="<?php echo $Title; ?>">
 	<meta property="og:description" content="<?php echo $MetaDescription; ?>">
-	<meta property="og:image" content="<?php echo htmlspecialchars( $OGImageURL ); ?>">
+	<meta property="og:image" content="<?php 
+		// Ensure og:image is always a full absolute URL
+		$imageURL = $OGImageURL;
+		if (!preg_match('/^https?:\/\//', $imageURL)) {
+			$imageURL = $BaseURL . ltrim($imageURL, '/');
+		}
+		echo htmlspecialchars($imageURL, ENT_QUOTES, 'UTF-8'); 
+	?>">
 	<meta property="og:image:width" content="1200">
 	<meta property="og:image:height" content="630">
 	<meta property="og:url" content="<?php echo htmlspecialchars( $CurrentPageURL ?? $BaseURL ); ?>">
@@ -170,14 +177,14 @@
 	<meta name="twitter:card" content="summary_large_image">
 	<meta name="twitter:title" content="<?php echo $Title; ?>">
 	<meta name="twitter:description" content="<?php echo $MetaDescription; ?>">
-	<meta name="twitter:image" content="<?php echo htmlspecialchars( $OGImageURL ); ?>">
-	<meta name="twitter:site" content="@">
-	
-	<!-- Canonical URL -->
-	<link rel="canonical" href="<?php echo htmlspecialchars( $CurrentPageURL ?? $BaseURL ); ?>">
-	
-	<!-- Additional SEO Meta Tags -->
-	<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+	<meta name="twitter:image" content="<?php 
+		// Ensure twitter:image is always a full absolute URL
+		$imageURL = $OGImageURL;
+		if (!preg_match('/^https?:\/\//', $imageURL)) {
+			$imageURL = $BaseURL . ltrim($imageURL, '/');
+		}
+		echo htmlspecialchars($imageURL, ENT_QUOTES, 'UTF-8'); 
+	?>">
 	<meta name="theme-color" content="#0d6efd">
 	
 	<!-- Preconnect + non-blocking stylesheet for Google Fonts to avoid unused-preload warning -->

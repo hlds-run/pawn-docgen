@@ -2,7 +2,7 @@
 set -e
 
 BASE_DIR="/srv/pawn-docgen"
-CACHE_DIR="$BASE_DIR/cache/og_images"
+CACHE_DIR="/var/www/html/cache/og_images"
 
 MARKER="$BASE_DIR/.og-cache-generated"
 
@@ -13,7 +13,6 @@ fi
 
 echo "[og-cache] generating OG image cache"
 
-mkdir -p "$CACHE_DIR"
 
 # Запуск PHP-скрипта для генерации кеша
 php "$BASE_DIR/generate/generate_og_cache.php"

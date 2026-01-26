@@ -67,7 +67,7 @@ if (!function_exists('ttfWrap')) {
 }
 
 // Create cache directory if it doesn't exist
-$cache_dir = __DIR__ . '/../cache/og_images/';
+$cache_dir = '/var/www/html/cache/og_images/';
 if (!is_dir($cache_dir)) {
     mkdir($cache_dir, 0755, true);
 }

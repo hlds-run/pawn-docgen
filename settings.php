@@ -12,7 +12,7 @@
 		'Files'     => 'pawnfiles'
 	);
 
-	$BaseURL = '/';
+	// $BaseURL = '/'; // Commented out to allow header.php to construct proper absolute URL
 	$Project = 'AMXModX';
 	
 

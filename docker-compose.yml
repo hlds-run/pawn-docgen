@@ -30,7 +30,7 @@ services:
       context: docker/
     restart: always
     volumes:
-      - ./www:/var/www/html:ro
+      - ./www:/var/www/html
       - ./settings.php:/var/www/settings.php:ro
 
       - ./generate:/srv/pawn-docgen/generate:ro
