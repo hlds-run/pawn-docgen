@@ -16,4 +16,4 @@ COPY . .
 EXPOSE 3000
 
 # Запускаем
-CMD ["bun", "run", "src/index.ts"]
+CMD ["bun", "run", "start"]

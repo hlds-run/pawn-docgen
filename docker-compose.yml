@@ -44,9 +44,7 @@ services:
   og-gen:
     build: ./docker/og-gen
     restart: always
-    environment:
-      - NODE_ENV=production
-      - SERVICE_SECRET=your_secret_key
+    env_file: *env-files
     ports:
       - "3000:3000"
 

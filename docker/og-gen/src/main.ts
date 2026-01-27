@@ -12,6 +12,7 @@ const config = {
   port: Number(process.env.PORT) || 3000,
   secret: process.env.SERVICE_SECRET || "dev-secret-key",
   checkHmac: process.env.CHECK_HMAC === "true",
+  isDev: process.env.NODE_ENV === "development",
 };
 
 const fontLoader = new FontLoaderService();
@@ -40,7 +41,7 @@ const server = Bun.serve({
     "/health": (req) => healthController.health(req),
   },
 
-  development: process.env.NODE_ENV === "development",
+  development: config.isDev,
 
   fetch(req) {
     return new Response("Not Found", { status: 404 });
@@ -53,4 +54,5 @@ console.log(`
   URL:      ${server.url}
   Port:     ${config.port}
   Security: ${config.checkHmac ? "✅ HMAC Enabled" : "⚠️  HMAC Disabled (Dev mode)"}
+  isDev:    ${config.isDev ? "🔧 Development" : " Production" + " mode"} 
 `);
