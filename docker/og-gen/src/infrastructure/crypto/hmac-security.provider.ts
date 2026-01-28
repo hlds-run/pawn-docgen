@@ -5,6 +5,7 @@ export class HmacSecurityProvider implements SecurityProvider {
   constructor(
     private readonly secret: string,
     private readonly isEnabled: boolean,
+    private readonly symbolsToCompare: number,
   ) {}
 
   verify(data: string, hash: string): boolean {
@@ -32,7 +33,7 @@ export class HmacSecurityProvider implements SecurityProvider {
     const hash = createHmac("sha256", this.secret)
       .update(data)
       .digest("hex")
-      .substring(0, 16);
+      .substring(0, this.symbolsToCompare);
 
     return hash;
   }

@@ -10,8 +10,9 @@ import { OgController } from "./presentation/controllers/og.controller";
 
 const config = {
   port: Number(process.env.PORT) || 3000,
-  secret: process.env.SERVICE_SECRET || "dev-secret-key",
+  secret: process.env.OG_HMAC_SECRET || "dev-secret-key",
   checkHmac: process.env.CHECK_HMAC === "true",
+  checkHmacSymbols: Number(process.env.CHECK_HMAC_SYMBOLS) || 8,
   isDev: process.env.NODE_ENV === "development",
 };
 
@@ -19,6 +20,7 @@ const fontLoader = new FontLoaderService();
 const securityProvider = new HmacSecurityProvider(
   config.secret,
   config.checkHmac,
+  config.checkHmacSymbols,
 );
 const imageRenderer = new TakumiRenderer(fontLoader);
 const htmlRenderer = new HtmlRenderer();
