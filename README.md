@@ -10,6 +10,7 @@
 Minimal Docker setup for running [alliedmodders/pawn-docgen](https://github.com/alliedmodders/pawn-docgen) with NGINX + PHP-FPM + MariaDB.
 
 This repository provides:
+
 - clean NGINX front controller configuration
 - PHP-FPM entrypoint with `/docker-entrypoint.d` support (nginx-style)
 - one-time database initialization via `generate/update.php`
@@ -21,37 +22,34 @@ This repository provides:
 
 No local PHP, MySQL or NGINX installation required.
 
-
 ## Services
 
-| Service | Image | Purpose |
-|------|------|-------|
-| nginx | `nginx:1-alpine` | HTTP frontend |
-| php-fpm | `php:8.5-fpm` | Application runtime |
-| mariadb | `mariadb:12.1` | Metadata storage |
-| adminer | `adminer:5` | DB web UI (optional) |
-
+| Service | Image             | Purpose                       |
+| ------- | ----------------- | ----------------------------- |
+| nginx   | `nginx:1-alpine`  | HTTP frontend & reverse proxy |
+| php-fpm | `php:8.5-fpm`     | Application runtime           |
+| mariadb | `mariadb:12.1`    | Metadata storage              |
+| og-gen  | `oven/bun:1-slim` | OG image generation service   |
+| adminer | `adminer:5`       | DB web UI (optional)          |
 
 ## Volumes
 
-| Path | Description |
-|---|---|
-| `./www` | pawn-docgen web files |
-| `./generate` | documentation generator script |
-| `./include` | pawn `.inc` includes |
+| Path             | Description                                   |
+| ---------------- | --------------------------------------------- |
+| `./www`          | pawn-docgen web files                         |
+| `./generate`     | documentation generator script                |
+| `./include`      | pawn `.inc` includes                          |
 | `./settings.php` | pawn-docgen and generate script configuration |
-
 
 ## Initialization
 
 On first container start:
 
 - `docker-entrypoint.sh` runs all scripts in `/docker-entrypoint.d`
-- `10-init-database.sh` executes  `php generate/update.php`
+- `10-init-database.sh` executes `php generate/update.php`
 - a marker file prevents re-running on next starts
 
 PHP-FPM continues running normally after initialization.
-
 
 ## Usage
 
@@ -59,12 +57,11 @@ PHP-FPM continues running normally after initialization.
 docker compose up -d
 ```
 
-
 ## Access
 
-- http://localhost:83/
-- http://localhost:83/amxmisc
-
+- http://localhost:83/ — pawn-docgen documentation site
+- http://localhost:83/amxmisc — specific include documentation
+- http://localhost:3000/health — og-gen service health check (internal)
 
 ## Notes
 
@@ -72,7 +69,8 @@ docker compose up -d
 - Clean URLs are handled by NGINX
 - No PHP code modifications (except fixes)
 - Initialization logic follows official nginx/mysql image patterns
-
+- OG image generation is handled by the `og-gen` service built with Bun and TypeScript
+- See [docker/og-gen/README.md](docker/og-gen/README.md) for og-gen service documentation
 
 ## License
 
