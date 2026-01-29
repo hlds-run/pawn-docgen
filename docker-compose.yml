@@ -40,6 +40,13 @@ services:
     depends_on:
       mysql_db:
         condition: service_healthy
+    
+  og-gen:
+    build: ./docker/og-gen
+    restart: always
+    env_file: *env-files
+    ports:
+      - "3000:3000"
 
   nginx:
     image: nginx:1-alpine

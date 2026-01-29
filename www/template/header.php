@@ -4,6 +4,7 @@
 	$Host = isset( $_SERVER['HTTP_HOST'] ) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'];
 	$RequestURI = isset( $_SERVER['REQUEST_URI'] ) ? $_SERVER['REQUEST_URI'] : '';
 	$CurrentPageURL = $Scheme . '://' . $Host . $RequestURI;
+	$OGRequestURI = $Scheme . '://' . $Host . '/og';
 	
 	// Meta description helper function
 	if( !function_exists( 'getTruncatedDescription' ) ) {
@@ -70,6 +71,28 @@
 		$Title = $Project . ' Scripting API Reference';
 	}
 	
+	// --- Логика генерации OG:IMAGE ---
+  $OG_Params = [
+    'title'    => $Project,
+    'subtitle' => $PageFunction[ 'Comment' ],
+    'tag'      => 'Pawn API',
+    'theme'    => 'dark'
+  ];
+
+  if (!empty($PageFunction)) {
+      $OG_Params['title'] = $PageFunction['Function'];
+      $OG_Params['tag']   = $CurrentOpenFile . '.inc';
+  } elseif (!empty($CurrentOpenFile)) {
+      $OG_Params['title'] = $CurrentOpenFile . '.inc';
+      $OG_Params['tag']   = $Project;
+  }
+
+	ksort($OG_Params);
+  $OG_QueryString = http_build_query($OG_Params);
+  $FullSignature = hash_hmac('sha256', $OG_Params['title'], getenv('OG_HMAC_SECRET'));
+  $OG_Signature = substr($FullSignature, 0, getenv('CHECK_HMAC_SYMBOLS'));
+  $SignedOGImageUrl = $OGRequestURI . '?' . $OG_QueryString . '&s=' . $OG_Signature;
+
 	if( $RenderLayout ):
 ?>
 <!DOCTYPE html>
@@ -87,13 +110,19 @@
 	<meta property="og:type" content="<?php echo $OGType; ?>">
 	<meta property="og:site_name" content="<?php echo htmlspecialchars( $Project ); ?> Scripting API">
 	<meta property="og:locale" content="en_US">
+
+	<meta property="og:image" content="<?php echo htmlspecialchars($SignedOGImageUrl); ?>">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:type" content="image/png">
 	
 	<!-- Twitter Card Meta Tags -->
-	<meta name="twitter:card" content="summary">
+	<meta name="twitter:card" content="summary_large_image">
 	<meta name="twitter:title" content="<?php echo $Title; ?>">
 	<meta name="twitter:description" content="<?php echo $MetaDescription; ?>">
 	<meta name="twitter:site" content="@">
-	
+  <meta name="twitter:image" content="<?php echo htmlspecialchars($SignedOGImageUrl); ?>">
+
 	<!-- Canonical URL -->
 	<link rel="canonical" href="<?php echo htmlspecialchars( $CurrentPageURL ?? $BaseURL ); ?>">
 	
