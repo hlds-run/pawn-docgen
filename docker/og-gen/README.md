@@ -1,10 +1,14 @@
+<center>
+    <img width="1200" height="630" alt="image" src="https://github.com/user-attachments/assets/7d910009-a190-4449-a87d-9c21f5591aeb" />
+</center>
+
 # OG-Gen Service
 
 A high-performance Open Graph image generation service for the pawn-docgen project.
 
 ## Overview
 
-The `og-gen` service is a TypeScript application that generates dynamic Open Graph (OG) images for social media sharing. It renders beautiful, customizable images for documentation pages using React components and the Takumi image rendering library.
+The `og-gen` service is a TypeScript application that generates dynamic [Open Graph (OG)](https://ogp.me/) images for social media sharing. It renders beautiful, customizable images for documentation pages using React components and the [Takumi](https://takumi.kane.tw) image rendering library.
 
 **Features:**
 
@@ -20,7 +24,7 @@ The `og-gen` service is a TypeScript application that generates dynamic Open Gra
 
 ### Clean Architecture Pattern
 
-The `og-gen` service follows **Clean Architecture** principles with strict layer separation:
+The `og-gen` service follows **[Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)** principles with strict layer separation:
 
 ```
 src/
@@ -73,7 +77,7 @@ Infrastructure (Implementations)
 
 ### CQS (Command Query Separation)
 
-The application layer uses **CQS** pattern:
+The application layer uses **[CQS](https://en.wikipedia.org/wiki/Command–query_separation)** pattern:
 
 - **Queries** = read operations that return data without side effects
 - **Commands** = write operations (not used in this service, but pattern is extensible)
@@ -314,10 +318,10 @@ export class TakumiRenderer implements ImageRenderer<Uint8Array> {
 }
 ```
 
-- ✅ Fast (~500ms per image)
+- ✅ Fast (~50ms per image)
 - ✅ Compiled Rust backend
 - ✅ Production-ready
-- ✅ Supports complex layouts
+- ✅ Supports complex layouts (with [Tailwind CSS](https://tailwindcss.com) out of the box)
 
 #### 2. HTML Renderer (Preview)
 
@@ -335,7 +339,7 @@ export class HtmlRenderer implements ImageRenderer<string> {
 - ✅ Instant rendering
 - ✅ No image generation overhead
 - ✅ Great for development
-- ✅ Uses React SSR (react-dom/server)
+- ✅ Uses React SSR ([react-dom/server](https://react.dev/reference/react-dom/server))
 
 ### Adding a New Renderer
 
@@ -406,7 +410,7 @@ The project uses **only 3 dependencies** (plus TypeScript types):
 **No dependencies for:**
 
 - HTTP server (built into Bun)
-- HMAC crypto (Node.js crypto module)
+- HMAC crypto (Bun crypto module)
 - Font loading (Bun file API)
 - Dependency injection (simple constructor injection)
 - React rendering (built-in with react-dom/server)
@@ -546,7 +550,7 @@ open preview.html
 
 ## Performance
 
-- **Rendering:** ~500ms per image (Takumi compiled library)
+- **Rendering:** ~50ms per image (Takumi compiled library)
 - **Caching:** Font files cached in memory after first load
 - **Cache-Control:** Images cached for 1 year (immutable)
 - **NGINX:** 30-day reverse proxy cache with stale-while-revalidate
@@ -606,7 +610,6 @@ $ogImageUrl = "/og?" . http_build_query($OG_Params) . "&s=" . $signature;
 ### Image rendering fails
 
 - Ensure font files exist in the container root
-- Check `NODE_ENV` is set correctly
 - Verify Takumi library version compatibility
 
 ### HMAC signature invalid
@@ -622,137 +625,3 @@ Error: Font file not found: ./IBMPlexSans-Regular.ttf
 ```
 
 Solution: Ensure TTF files are in `docker/og-gen/` directory before building.
-
-## Best Practices Implemented
-
-### 1. **Domain-Driven Design (DDD)**
-
-- Business logic isolated in `domain/` layer
-- Entities validate their own state
-- Clear ubiquitous language (OgImage, Theme, Security)
-
-### 2. **SOLID Principles**
-
-| Principle                     | Implementation                                      |
-| ----------------------------- | --------------------------------------------------- |
-| **S** (Single Responsibility) | Query handlers do one thing: execute use case       |
-| **O** (Open/Closed)           | Add new renderers without modifying existing code   |
-| **L** (Liskov Substitution)   | All renderers implement `ImageRenderer<T>` contract |
-| **I** (Interface Segregation) | Separate `ImageRenderer` and `SecurityProvider`     |
-| **D** (Dependency Inversion)  | Depend on interfaces, not concrete classes          |
-
-### 3. **CQS Pattern**
-
-- Queries (read) separated from Commands (future write ops)
-- Each query has dedicated handler
-- Clear input/output contracts
-
-### 4. **Composition over Inheritance**
-
-```typescript
-// ✅ Constructor injection (composition)
-class GetOgImageHandler {
-  constructor(
-    private renderer: ImageRenderer<Uint8Array>,
-    private security: SecurityProvider,
-  ) {}
-}
-
-// ❌ Avoided: inheritance chains
-class PngImageHandler extends ImageHandler {}
-```
-
-### 5. **Type Safety**
-
-- Strict TypeScript (no `any`)
-- Generic types for flexible renderer implementations
-- Interface-based contracts
-
-### 6. **Minimal Dependencies**
-
-- No ORM, no HTTP framework, no DI container
-- Direct constructor injection
-- Simple, transparent dependency graph
-
-### 7. **Error Handling**
-
-```typescript
-// Domain throws business exceptions
-if (!isValid) throw new Error("Invalid signature");
-
-// Controller translates to HTTP responses
-catch (error: any) {
-  const isAuthError = error.message === "Invalid signature";
-  return new Response(error.message, {
-    status: isAuthError ? 403 : 500
-  });
-}
-```
-
-## Comparison: Before & After Refactoring
-
-### ❌ Without Clean Architecture
-
-```typescript
-// Tightly coupled, hard to test
-async function renderOgImage(req: Request) {
-  const title = req.url.searchParams.get('title');
-  const signature = req.url.searchParams.get('s');
-
-  // Verification logic mixed with HTTP
-  if (!signature) throw new Error('No sig');
-
-  // Rendering logic mixed with verification
-  const secret = process.env.OG_HMAC_SECRET;
-  const hash = createHmac('sha256', secret).update(title).digest('hex');
-  if (hash !== signature) throw new Error('Invalid sig');
-
-  // Image generation logic mixed with everything
-  const img = new ImageResponse(element, { ... });
-  return new Response(await img.arrayBuffer(), {
-    headers: { 'Content-Type': 'image/png' }
-  });
-}
-```
-
-**Problems:**
-
-- ❌ Can't test handler without HTTP
-- ❌ Can't swap renderers
-- ❌ Can't reuse verification logic
-- ❌ Hard to understand business logic
-- ❌ Difficult to maintain
-
-### ✅ With Clean Architecture
-
-```typescript
-// Domain: Pure business logic
-class GetOgImageHandler {
-  async execute(query: GetOgImageQuery): Promise<Uint8Array> {
-    const isValid = this.security.verify(query.image.title, query.signature);
-    if (!isValid) throw new Error("Invalid signature");
-    return await this.renderer.render(query.image);
-  }
-}
-
-// Application: Use case
-const query = new GetOgImageQuery(image, signature);
-const imageBuffer = await handler.execute(query);
-
-// Presentation: HTTP concern
-const controller = new OgController(handler, previewHandler);
-const response = await controller.render(req);
-```
-
-**Benefits:**
-
-- ✅ Test handler without HTTP
-- ✅ Swap renderers with one line
-- ✅ Reuse logic anywhere
-- ✅ Clear intent and separation
-- ✅ Easy to maintain and extend
-
-## License
-
-Part of the [pawn-docgen](https://github.com/alliedmodders/pawn-docgen) project.
-Licensed under the same terms as the upstream project.
