@@ -4,7 +4,9 @@
   "type": "module",
   "scripts": {
     "start": "bun run src/main.ts",
-    "dev": "bun run --watch src/main.ts"
+    "dev": "bun run --watch src/main.ts",
+    "test": "bun test",
+    "test:watch": "bun test --watch"
   },
   "dependencies": {
     "@takumi-rs/image-response": "^0.66.0",
