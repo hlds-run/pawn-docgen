@@ -4,8 +4,9 @@
  * Generates XML sitemap for search engines with proper priorities
  */
 
-// $Scheme = isset( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] !== 'off' ? 'https' : 'http';
-$Scheme = 'https';
+// TODO: temporary force https scheme for better search indexing, fix it later on reverse proxy (NGinx)
+$Scheme = isset( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] !== 'off' ? 'https' : 'https';
+
 $Host = isset( $_SERVER['HTTP_HOST'] ) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'];
 $BaseURLFull = $Scheme . '://' . $Host . rtrim( $GLOBALS['BaseURL'], '/' ) . '/';
 
