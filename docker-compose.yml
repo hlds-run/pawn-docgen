@@ -34,8 +34,11 @@ services:
       dockerfile: docker/Dockerfile
     restart: always
     volumes:
-      - ./www:/var/www/html
-      - vendor:/var/www/html/vendor
+      - ./www/index.php:/var/www/html/index.php:ro
+      - ./www/templates:/var/www/html/templates:ro
+      - ./www/script.js:/var/www/html/script.js:ro
+      - ./www/style.css:/var/www/html/style.css:ro
+      - ./www/.htaccess:/var/www/html/.htaccess:ro
       - ./settings.php:/var/www/settings.php:ro
 
       - ./generate:/srv/pawn-docgen/generate:ro
