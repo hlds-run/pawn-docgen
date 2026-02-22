@@ -1,0 +1,39 @@
+{% for file in includes %}
+{% set is_current_file = current_open_file == file %}
+<h4 class="file"><a data-file="{{ file }}" href="{{ base_url }}{{ file }}" aria-label="Browse {{ file }}.inc include file">{{ file }}</a></h4>
+<div class="nav-functions {{ is_current_file ? ' show' : '' }}" id="file-{{ file }}" aria-label="Functions in {{ file }}.inc">
+
+{% if functions[file] is defined %}
+{% set previous_type = '' %}
+{% set opened = false %}
+
+{% for func in functions[file] %}
+{% if previous_type != func.Type %}
+{% if opened %}
+</ul></div></div>
+{% endif %}
+
+{% set opened = true %}
+{% set previous_type = func.Type %}
+
+{{ get_function_header(func.Type)|raw }}<div class="card-body"><ul class="nav nav-sidebar" role="list">
+{% endif %}
+
+{% set fn = func.Function %}
+{% set fc = func.Comment %}
+{% set ft = func.Type %}
+<li class="function{{ current_open_function == fn ? ' active' : '' }}" data-title="{{ fn }}" data-content="{{ fc }}" role="listitem">
+<a href="{{ base_url }}{{ file }}/{{ fn|url_encode }}" aria-label="{{ fn }} - {{ ft }}">{{ fn }}</a>
+</li>
+{% endfor %}
+
+{% if opened %}
+</ul></div></div>
+{% endif %}
+
+{% else %}
+<div class="card border-primary mb-2"><div class="card-header bg-primary text-white">No functions</div><div class="card-body text-center">This include file has no functions.</div></div>
+{% endif %}
+
+</div>
+{% endfor %}

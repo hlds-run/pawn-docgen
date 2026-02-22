@@ -1,0 +1,70 @@
+<nav aria-label="Breadcrumb">
+	<ol class="breadcrumb">
+		<li class="breadcrumb-item"><a href="{{ base_url }}">{{ project }}</a></li>
+		<li class="breadcrumb-item"><a href="{{ base_url }}{{ current_open_file }}">{{ current_open_file }}.inc</a></li>
+		<li class="breadcrumb-item"><a href="{{ base_url }}{{ current_open_file }}/__functions">Functions</a></li>
+		<li class="breadcrumb-item active" aria-current="page">{{ page_function.Function }}</li>
+		<li class="ms-auto"><a href="{{ base_url }}{{ current_open_file }}/__raw">File</a></li>
+		<li><a href="{{ base_url }}{{ current_open_file }}">Constants</a></li>
+	</ol>
+</nav>
+
+<article>
+
+<h1 class="border-bottom pb-2 mb-3">{{ page_function.Function }}</h1>
+
+<h2 class="sub-header2">Syntax</h2>
+<pre class="syntax" aria-label="Function syntax"><code>{{ page_function.FullFunction }}</code></pre>
+
+{% if parameters is not empty %}
+<h2 class="sub-header2">Usage</h2>
+<div class="table-responsive">
+	<table class="table table-bordered table-hover">
+		<thead>
+			<tr>
+				<th>Parameter</th>
+				<th>Description</th>
+			</tr>
+		</thead>
+		{% for tag in parameters %}
+		<tr><td>{{ tag.Variable }}</td><td><pre class="description">{{ tag.Description }}</pre></td></tr>
+		{% endfor %}
+	</table>
+</div>
+{% endif %}
+
+<h2 class="sub-header2">Description</h2>
+<pre class="description">{{ page_function.Comment }}</pre>
+
+{% if other_tags is not empty %}
+{% set grouped_tags = other_tags|group_by_tag %}
+
+{% for tag_type, tags in grouped_tags %}
+{% if tag_type == 'noreturn' %}
+<h2 class="sub-header2">Return</h2>
+<pre class="description">{{ page_function.Type == 'forward' ? 'This forward ignores the returned value.' : 'This function has no return value.' }}</pre>
+{% elseif tag_type == 'deprecated' %}
+<div class="alert alert-danger" role="alert" style="margin-top:20px">
+<p>This function has been deprecated, do NOT use it</p>
+
+{% if tags[0].Description is not empty %}
+<p><strong>Reason:</strong> {{ tags[0].Description }}</p>
+{% endif %}
+
+</div>
+{% else %}
+<h2 class="sub-header2">{{ tag_type|first|upper ~ tag_type|slice(1) }}</h2>
+
+{% if tags|length > 1 %}
+<ul>
+{% for tag in tags %}
+<li><pre class="description">{{ tag.Description }}</pre></li>
+{% endfor %}
+</ul>
+{% else %}
+<pre class="description">{{ tags[0].Description }}</pre>
+{% endif %}
+{% endif %}
+{% endfor %}
+{% endif %}
+</article>

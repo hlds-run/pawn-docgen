@@ -1,0 +1,27 @@
+<nav aria-label="Breadcrumb">
+	<ol class="breadcrumb">
+		<li class="breadcrumb-item"><a href="{{ base_url }}">{{ project }}</a></li>
+		<li class="breadcrumb-item"><a href="{{ base_url }}{{ current_open_file }}">{{ current_open_file }}.inc</a></li>
+		<li class="breadcrumb-item active" aria-current="page">Functions</li>
+		<li class="ms-auto"><a href="{{ base_url }}{{ current_open_file }}/__raw">File</a></li>
+		<li><a href="{{ base_url }}{{ current_open_file }}">Constants</a></li>
+	</ol>
+</nav>
+
+<h1 class="border-bottom pb-2 mb-3">Functions in {{ current_open_file }}.inc</h1>
+
+<h2>List of functions</h2>
+
+<div class="table-responsive">
+	<table class="table table-bordered table-hover">
+		<thead>
+			<tr>
+				<th>Function</th>
+				<th>Description</th>
+			</tr>
+		</thead>
+		{% for function in page_functions %}
+		<tr><td><a href="{{ base_url }}{{ current_open_file }}/{{ function.Function }}">{{ function.Function }}</a></td><td><pre class="description">{{ function.Comment }}</pre></td></tr>
+		{% endfor %}
+	</table>
+</div>
