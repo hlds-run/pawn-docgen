@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+	<url>
+		<loc>{{ base_url_full }}</loc>
+		<changefreq>monthly</changefreq>
+		<priority>0.8</priority>
+	</url>
+{% for file_id, file_name in files %}
+	<url>
+		<loc>{{ base_url_full }}{{ file_name }}</loc>
+		<changefreq>monthly</changefreq>
+		<priority>0.6</priority>
+	</url>
+	<url>
+		<loc>{{ base_url_full }}{{ file_name }}/__raw</loc>
+		<changefreq>monthly</changefreq>
+		<priority>0.8</priority>
+	</url>
+	<url>
+		<loc>{{ base_url_full }}{{ file_name }}/__functions</loc>
+		<changefreq>monthly</changefreq>
+		<priority>0.7</priority>
+	</url>
+{% for function in functions_by_file[file_name]|default([]) %}
+	<url>
+		<loc>{{ base_url_full }}{{ file_name }}/{{ function.Function }}</loc>
+		<changefreq>monthly</changefreq>
+		<priority>1.0</priority>
+	</url>
+{% endfor %}
+{% endfor %}
+</urlset>

@@ -8,9 +8,15 @@ RUN docker-php-ext-install \
   pdo \
   pdo_mysql
 
+# Install Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-COPY php/entrypoint/docker-entrypoint.sh /docker-entrypoint.sh
-COPY php/entrypoint/docker-entrypoint.d /docker-entrypoint.d
+WORKDIR /tmp/pawn-docgen
+COPY composer.json .
+RUN composer install --no-dev --optimize-autoloader && mv vendor /var/www/html/vendor
+
+COPY docker/php/entrypoint/docker-entrypoint.sh /docker-entrypoint.sh
+COPY docker/php/entrypoint/docker-entrypoint.d /docker-entrypoint.d
 
 RUN chmod +x /docker-entrypoint.sh \
   && chmod +x /docker-entrypoint.d/*.sh

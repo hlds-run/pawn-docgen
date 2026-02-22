@@ -2,6 +2,9 @@ x-common-variables: &env-files
   - .env
   # - .env.local
 
+volumes:
+  vendor:
+
 services:
   mysql_db:
     image: mariadb:12.1
@@ -27,10 +30,15 @@ services:
 
   php-fpm:
     build:
-      context: docker/
+      context: .
+      dockerfile: docker/Dockerfile
     restart: always
     volumes:
-      - ./www:/var/www/html:ro
+      - ./www/index.php:/var/www/html/index.php:ro
+      - ./www/templates:/var/www/html/templates:ro
+      - ./www/script.js:/var/www/html/script.js:ro
+      - ./www/style.css:/var/www/html/style.css:ro
+      - ./www/.htaccess:/var/www/html/.htaccess:ro
       - ./settings.php:/var/www/settings.php:ro
 
       - ./generate:/srv/pawn-docgen/generate:ro

@@ -1,0 +1,91 @@
+<nav aria-label="Breadcrumb">
+	<ol class="breadcrumb">
+		<li class="breadcrumb-item"><a href="{{ base_url }}">{{ project }}</a></li>
+		<li class="breadcrumb-item"><a href="{{ base_url }}{{ current_open_file }}">{{ current_open_file }}.inc</a></li>
+		<li class="breadcrumb-item active" aria-current="page">Constants</li>
+		<li class="ms-auto"><a href="{{ base_url }}{{ current_open_file }}/__raw">File</a></li>
+		<li><a href="{{ base_url }}{{ current_open_file }}/__functions">Functions</a></li>
+	</ol>
+</nav>
+
+<article>
+
+<h1 class="border-bottom pb-2 mb-3">Constants in {{ page_name }}.inc</h1>
+
+<h2>List of constants</h2>
+
+{% for result in results %}
+{% set tags = result.Tags|json_decode ?: [] %}
+{% set close_panel = false %}
+
+{% if result.Comment[:8] == '@section' %}
+{% set in_section = in_section + 1 %}
+{% set slug = result.Comment[9:]|string_to_slug %}
+
+<div class="card card-info mb-3" id="{{ slug }}">
+<div class="card-header bg-info text-white">{{ result.Comment[9:] }}<a href="#{{ slug }}" class="permalink float-end" aria-label="Copy link to this section">#</a></div>
+
+{% if tags is empty and result.Constant is empty %}
+{% set in_section_body = in_section_body + 1 %}
+<div class="card-body">
+{% else %}
+<div class="card-body">
+{% endif %}
+
+{% elseif result.Comment == '@endsection' and in_section > 0 %}
+{% set in_section = in_section - 1 %}
+
+{% if in_section_body > 0 %}
+{% set in_section_body = in_section_body - 1 %}
+</div>
+{% endif %}
+
+</div>
+
+{% else %}
+{% set slug = result.Comment|string_to_slug %}
+<div class="card card-primary mb-3" id="{{ slug }}">
+<div class="card-header bg-primary text-white">{{ result.Comment }}<a href="#{{ slug }}" class="permalink float-end" aria-label="Copy link to {{ result.Comment }}">#</a></div>
+
+{% set close_panel = true %}
+{% endif %}
+
+{% if tags is not empty %}
+<div class="card-body">
+
+{% set grouped_tags = tags|group_by_tag %}
+
+{% for tag_type, tag_list in grouped_tags %}
+<h3 class="sub-header2">{{ tag_type|first|upper ~ tag_type[1:] }}</h3>
+
+{% if tag_list|length > 1 %}
+<ul>
+{% for tag in tag_list %}
+<li><pre class="description">{{ tag.Description }}</pre></li>
+{% endfor %}
+</ul>
+{% else %}
+<pre class="description">{{ tag_list[0].Description }}</pre>
+{% endif %}
+{% endfor %}
+
+</div>
+{% endif %}
+
+{% if result.Constant is not empty %}
+<div class="card-footer"><pre class="description">{{ result.Constant }}</pre></div>
+{% endif %}
+
+{% if close_panel %}
+</div>
+{% endif %}
+{% endfor %}
+
+{% for i in 0..in_section-1 %}
+</div>
+{% endfor %}
+
+{% for i in 0..in_section_body-1 %}
+</div>
+{% endfor %}
+</article>
