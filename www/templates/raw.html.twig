@@ -1,12 +1,13 @@
-<nav aria-label="Breadcrumb">
-	<ol class="breadcrumb">
-		<li class="breadcrumb-item"><a href="{{ base_url }}">{{ project }}</a></li>
-		<li class="breadcrumb-item"><a href="{{ base_url }}{{ current_open_file }}">{{ current_open_file }}.inc</a></li>
-		<li class="breadcrumb-item active" aria-current="page">File</li>
-		<li class="ms-auto"><a href="{{ base_url }}{{ current_open_file }}/__functions">Functions</a></li>
-		<li><a href="{{ base_url }}{{ current_open_file }}">Constants</a></li>
-	</ol>
-</nav>
+{% from '_breadcrumb.html.twig' import breadcrumb %}
+
+{{ breadcrumb([
+	{label: project, url: base_url},
+	{label: current_open_file ~ '.inc', url: base_url ~ current_open_file},
+	{label: 'File', active: true}
+], [
+	{label: 'Functions', url: base_url ~ current_open_file ~ '/__functions'},
+	{label: 'Constants', url: base_url ~ current_open_file}
+]) }}
 
 <article>
 

@@ -1,0 +1,17 @@
+{% macro breadcrumb(items, right_items) %}
+<nav aria-label="Breadcrumb">
+	<ol class="breadcrumb">
+		{% for item in items %}
+		<li class="breadcrumb-item{% if item.active %} active{% endif %}"{% if item.active %} aria-current="page"{% endif %}>
+			{% if item.url and not item.active %}<a href="{{ item.url }}">{% endif %}{{ item.label }}{% if item.url and not item.active %}</a>{% endif %}
+		</li>
+		{% endfor %}
+		{% if right_items %}
+		<li class="ms-auto"><a href="{{ right_items[0].url }}">{{ right_items[0].label }}</a></li>
+		{% for item in right_items|slice(1) %}
+		<li><a href="{{ item.url }}">{{ item.label }}</a></li>
+		{% endfor %}
+		{% endif %}
+	</ol>
+</nav>
+{% endmacro %}
