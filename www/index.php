@@ -46,13 +46,13 @@ if (substr($Path, 0, 8) === '__search') {
     $RenderLayout = false;
 }
 
+$CurrentOpenFile = false;
+$CurrentOpenFunction = false;
+$Includes = [];
+$Functions = [];
+
 if ($RenderLayout) {
-    $CurrentOpenFile = false;
-    $CurrentOpenFunction = false;
-
     $Includes = $Database->query('SELECT `ID`, `IncludeName` FROM `' . $Columns['Files'] . '` ORDER BY `IncludeName` ASC')->fetchAll(PDO::FETCH_KEY_PAIR);
-
-    $Functions = [];
 
     $STH = $Database->query('SELECT `Function`, `Type`, `Comment`, `IncludeName` FROM `' . $Columns['Functions'] . '` ORDER BY `Type` ASC, `Function` ASC');
 
