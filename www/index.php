@@ -79,10 +79,10 @@ $OG_Signature = substr($FullSignature, 0, $CHECK_HMAC_SYMBOLS);
 if ($Path) {
     $Path = explode('/', $Path, 2);
 
-    $Action = !empty($Path[1]) ? filter_var($Path[1], FILTER_SANITIZE_STRING) : false;
+    $Action = !empty($Path[1]) ? htmlspecialchars($Path[1], ENT_QUOTES, 'UTF-8') : false;
 
     if (isset($Path[0])) {
-        $IncludeName = filter_var($Path[0], FILTER_SANITIZE_STRING);
+        $IncludeName = htmlspecialchars($Path[0], ENT_QUOTES, 'UTF-8');
 
         if ($IncludeName === '__search') {
             if (empty($Action)) {
