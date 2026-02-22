@@ -8,7 +8,7 @@ use Twig\TwigFilter;
 $loader = new FilesystemLoader(__DIR__ . '/templates');
 $twig = new Environment($loader, [
     'cache' => false,
-    'autoescape' => false,
+    'autoescape' => 'html',
 ]);
 
 $twig->addFilter(new TwigFilter('string_to_slug', function ($string) {
@@ -29,16 +29,6 @@ $twig->addFilter(new TwigFilter('json_decode', function ($json) {
     return json_decode($json, true);
 }));
 
-$twig->addFunction(new Twig\TwigFunction('get_function_header', function ($Type) {
-    switch ($Type) {
-        case 'forward': return '<div class="card border-info mb-2"><div class="card-header bg-info text-white">Forwards</div>';
-        case 'native': return '<div class="card border-success mb-2"><div class="card-header bg-success text-white">Natives</div>';
-        case 'stock': return '<div class="card border-warning mb-2"><div class="card-header bg-warning text-dark">Stocks</div>';
-        case 'functag': return '<div class="card border-danger mb-2"><div class="card-header bg-danger text-white">Functags</div>';
-    }
-    return '<div class="card border-primary mb-2"><div class="card-header bg-primary text-white">' . $Type . '</div>';
-}));
-
 function getTruncatedDescription($text, $maxLength = 160) {
     if (empty($text)) {
         return '';
@@ -52,17 +42,7 @@ function getTruncatedDescription($text, $maxLength = 160) {
         }
         $text .= '...';
     }
-    return htmlspecialchars($text, ENT_QUOTES, 'UTF-8');
-}
-
-function getFunctionHeader($Type) {
-    switch ($Type) {
-        case 'forward': return '<div class="card border-info mb-2"><div class="card-header bg-info text-white">Forwards</div>';
-        case 'native': return '<div class="card border-success mb-2"><div class="card-header bg-success text-white">Natives</div>';
-        case 'stock': return '<div class="card border-warning mb-2"><div class="card-header bg-warning text-dark">Stocks</div>';
-        case 'functag': return '<div class="card border-danger mb-2"><div class="card-header bg-danger text-white">Functags</div>';
-    }
-    return '<div class="card border-primary mb-2"><div class="card-header bg-primary text-white">' . $Type . '</div>';
+    return $text;
 }
 
 require __DIR__ . '/../settings.php';
