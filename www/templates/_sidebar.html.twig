@@ -24,7 +24,7 @@
 {% set fn = func.Function %}
 {% set fc = func.Comment %}
 {% set ft = func.Type %}
-<li class="function{{ current_open_function == fn ? ' active' : '' }}" data-title="{{ fn }}" data-content="{{ fc }}" role="listitem">
+<li class="function{{ current_open_function == fn ? ' active' : '' }}" data-file="{{ file }}" data-title="{{ fn }}" data-content="{{ fc }}" role="listitem">
 <a href="{{ base_url }}{{ file }}/{{ fn|url_encode }}" aria-label="{{ fn }} - {{ ft }}">{{ fn }}</a>
 </li>
 {% endfor %}

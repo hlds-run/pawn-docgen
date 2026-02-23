@@ -1,6 +1,5 @@
 x-common-variables: &env-files
   - .env
-  # - .env.local
 
 volumes:
   vendor:
@@ -19,32 +18,16 @@ services:
       timeout: 5s
       retries: 15
 
-  # adminer:
-  #   image: adminer:5
-  #   ports:
-  #     - 85:8080
-  #   restart: always
-  #   depends_on:
-  #     mysql_db:
-  #       condition: service_healthy
-
   php-fpm:
     build:
       context: .
       dockerfile: docker/Dockerfile
     restart: always
     volumes:
-      - ./www/index.php:/var/www/html/index.php:ro
-      - ./www/templates:/var/www/html/templates:ro
-      - ./www/script.js:/var/www/html/script.js:ro
-      - ./www/style.css:/var/www/html/style.css:ro
-      - ./www/.htaccess:/var/www/html/.htaccess:ro
-      - ./www/src:/var/www/html/src:ro
-      - ./settings.php:/var/www/settings.php:ro
-
+      - ./www:/var/www/html:ro
+      - ./settings.php:/srv/pawn-docgen/settings.php:ro
       - ./generate:/srv/pawn-docgen/generate:ro
       - ./scripts:/srv/pawn-docgen/scripts:ro
-      - ./settings.php:/srv/pawn-docgen/settings.php:ro
     env_file: *env-files
     depends_on:
       mysql_db:

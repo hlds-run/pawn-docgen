@@ -60,7 +60,11 @@
 	$('.function').each(function () {
 		var $this = $(this);
 
-		functions.push([$this.data('title'), $this.data('content')]);
+		functions.push({
+			file: $this.data('file'),
+			title: $this.data('title'),
+			content: $this.data('content')
+		});
 	});
 
 	var constantSearch = new Bloodhound({
@@ -90,9 +94,13 @@
 			source: function (query, callback) {
 				var matches = [], substrRegex = new RegExp(query, 'i');
 
-				$.each(functions, function (i, str) {
-					if (substrRegex.test(str)) {
-						matches.push({ value: str[0] });
+				$.each(functions, function (i, func) {
+					if (substrRegex.test(func.title)) {
+						matches.push({ 
+							includeName: func.file, 
+							value: func.title,
+							type: 'function'
+						});
 					}
 				});
 
@@ -118,17 +126,28 @@
 				});
 			}
 		}).on('typeahead:selected', function (a, b, source) {
-			// Check if this is a constant (has includeName but not from functions source)
-			if (b.includeName) {
-				// Direct navigation to constants page for this file
-				var baseUrl = $('body').data('baseurl');
-				var url = baseUrl + b.includeName;
-				window.location.href = url;
-
+			var baseUrl = $('body').data('baseurl');
+			
+			// Check result type for navigation
+			if (b.type === 'function') {
+				// Navigate to function page: /includeName/functionName
+				window.location.href = baseUrl + b.includeName + '/' + b.value;
+			} else if (b.type === 'constant') {
+				// Navigate to constants page: /includeName
+				window.location.href = baseUrl + b.includeName;
+			} else if (b.includeName) {
+				// Fallback - try to determine from source
+				var isFunction = (source && source.name === 'functions');
+				
+				if (isFunction) {
+					window.location.href = baseUrl + b.includeName + '/' + b.value;
+				} else {
+					window.location.href = baseUrl + b.includeName;
+				}
 				return;
 			}
 
-			// Handle functions selection
+			// Handle functions selection from page (fallback)
 			var func = $('[data-title="' + b.value + '"]');
 
 			$('.nav-functions.show').removeClass('show');
