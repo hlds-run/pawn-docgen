@@ -22,15 +22,51 @@ This repository provides:
 
 No local PHP, MySQL or NGINX installation required.
 
+## Architecture
+
+The application uses **Slim 4** framework with modern PHP patterns:
+
+| Component | Technology |
+|-----------|------------|
+| Framework | Slim 4 |
+| DI Container | PHP-DI |
+| ORM | Doctrine DBAL |
+| Templates | Twig 3 |
+| HTTP | PSR-7 (slim/psr7) |
+
+### Source Structure
+
+```
+www/
+├── index.php                    # Entry point (forward to public/)
+├── public/
+│   └── index.php               # Slim bootstrap
+├── src/
+│   ├── settings.php            # Configuration (database, app)
+│   ├── dependencies.php        # DI container definitions
+│   ├── routes.php             # Application routing
+│   ├── Controller/
+│   │   ├── HomeController.php
+│   │   ├── FileController.php
+│   │   ├── SearchController.php
+│   │   └── SystemController.php
+│   ├── Repository/            # Data access layer
+│   │   ├── FileRepository.php
+│   │   ├── FunctionRepository.php
+│   │   └── ConstantRepository.php
+│   └── Service/
+│       └── PageContextBuilder.php
+└── templates/
+```
+
 ## Services
 
 | Service | Image             | Purpose                       |
 | ------- | ----------------- | ----------------------------- |
 | nginx   | `nginx:1-alpine`  | HTTP frontend & reverse proxy |
-| php-fpm | `php:8.5-fpm`     | Application runtime           |
-| mariadb | `mariadb:12.1`    | Metadata storage              |
-| og-gen  | `oven/bun:1-slim` | OG image generation service   |
-| adminer | `adminer:5`       | DB web UI (optional)          |
+| php-fpm | `php:8.5-fpm`    | Application runtime           |
+| mariadb | `mariadb:12.1`    | Metadata storage             |
+| og-gen  | `oven/bun:1-slim` | OG image generation service  |
 
 ## Volumes
 
@@ -63,11 +99,35 @@ docker compose up -d
 - http://localhost:83/amxmisc — specific include documentation
 - http://localhost:3000/health — og-gen service health check (internal)
 
+## Development
+
+### Running tests
+
+The application can be tested via curl:
+
+```bash
+curl http://localhost:83/
+curl http://localhost:83/amxmodx
+curl http://localhost:83/amxmodx/__functions
+curl http://localhost:83/__search/admin
+```
+
+### Rebuilding vendor
+
+If composer dependencies change:
+
+```bash
+docker compose build php-fpm
+docker create --name=temp-container pawn-docgen-php-fpm
+docker cp temp-container:/var/www/html/vendor www/
+docker rm temp-container
+docker compose up -d
+```
+
 ## Notes
 
 - No domain configuration required (default server)
 - Clean URLs are handled by NGINX
-- No PHP code modifications (except fixes)
 - Initialization logic follows official nginx/mysql image patterns
 - OG image generation is handled by the `og-gen` service built with Bun and TypeScript
 - See [docker/og-gen/README.md](docker/og-gen/README.md) for og-gen service documentation
