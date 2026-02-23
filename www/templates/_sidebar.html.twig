@@ -1,3 +1,5 @@
+{% from '_function_header.html.twig' import function_header %}
+
 {% for file in includes %}
 {% set is_current_file = current_open_file == file %}
 <h4 class="file"><a data-file="{{ file }}" href="{{ base_url }}{{ file }}" aria-label="Browse {{ file }}.inc include file">{{ file }}</a></h4>
@@ -16,7 +18,7 @@
 {% set opened = true %}
 {% set previous_type = func.Type %}
 
-{{ get_function_header(func.Type)|raw }}<div class="card-body"><ul class="nav nav-sidebar" role="list">
+{{ function_header(func.Type) }}<div class="card-body"><ul class="nav nav-sidebar" role="list">
 {% endif %}
 
 {% set fn = func.Function %}

@@ -39,6 +39,7 @@ services:
       - ./www/script.js:/var/www/html/script.js:ro
       - ./www/style.css:/var/www/html/style.css:ro
       - ./www/.htaccess:/var/www/html/.htaccess:ro
+      - ./www/src:/var/www/html/src:ro
       - ./settings.php:/var/www/settings.php:ro
 
       - ./generate:/srv/pawn-docgen/generate:ro
