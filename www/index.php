@@ -8,6 +8,7 @@ $twig = createTwig();
 require __DIR__ . '/../settings.php';
 
 $Path = isset($_SERVER['QUERY_STRING']) ? trim($_SERVER['QUERY_STRING'], '/') : '';
+$Path = preg_replace('/(_pjax=[^&]*|&.*$)/', '', $Path);
 
 if ($Path === 'robots.txt') {
     header('Content-Type: text/plain; charset=UTF-8');
