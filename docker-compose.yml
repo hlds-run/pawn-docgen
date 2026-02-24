@@ -25,6 +25,8 @@ services:
     restart: always
     volumes:
       - ./www:/var/www/html:ro
+      - ./vendor:/var/www/html/vendor:ro
+      - ./composer.json:/var/www/html/composer.json:ro
       - ./settings.php:/srv/pawn-docgen/settings.php:ro
       - ./generate:/srv/pawn-docgen/generate:ro
       - ./scripts:/srv/pawn-docgen/scripts:ro
