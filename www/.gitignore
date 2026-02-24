@@ -1,5 +1,5 @@
-# Local dependencies (should be at root level)
-/vendor
+# Dependencies managed by composer at project root
+vendor/
 
 # IDE
 .idea/
