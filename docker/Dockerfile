@@ -13,7 +13,10 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 WORKDIR /tmp/pawn-docgen
 COPY www/composer.json .
-RUN composer install --no-dev --optimize-autoloader && mv vendor ../www/
+RUN composer install --no-dev --optimize-autoloader
+
+# Copy vendor to correct location in final image
+RUN mkdir -p /var/www/html && cp -r vendor /var/www/html/
 
 COPY docker/php/entrypoint/docker-entrypoint.sh /docker-entrypoint.sh
 COPY docker/php/entrypoint/docker-entrypoint.d /docker-entrypoint.d
