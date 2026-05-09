@@ -40,11 +40,14 @@ services:
       - ./www/style.css:/var/www/html/style.css:ro
       - ./www/.htaccess:/var/www/html/.htaccess:ro
       - ./www/src:/var/www/html/src:ro
+      - ./composer.json:/var/www/html/composer.json:ro
+      - ./composer.lock:/var/www/html/composer.lock:ro
       - ./settings.php:/var/www/settings.php:ro
 
       - ./generate:/srv/pawn-docgen/generate:ro
       - ./scripts:/srv/pawn-docgen/scripts:ro
       - ./settings.php:/srv/pawn-docgen/settings.php:ro
+      - vendor:/var/www/html/vendor
     env_file: *env-files
     depends_on:
       mysql_db:
