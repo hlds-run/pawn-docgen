@@ -142,6 +142,7 @@ function buildPageContext(
     return [
         'base_url' => $BaseURL,
         'project' => $Project,
+        'yandex_metrika_id' => getenv('YANDEX_METRIKA_ID') ?? null,
         'current_open_file' => $CurrentOpenFile,
         'current_open_function' => $CurrentOpenFunction,
         'includes' => $Includes ? array_values($Includes) : [],
