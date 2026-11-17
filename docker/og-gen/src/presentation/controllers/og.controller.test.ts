@@ -35,13 +35,13 @@ describe("OG request handling", () => {
     expect([...new Uint8Array(await response.arrayBuffer())]).toEqual([1, 2, 3]);
   });
 
-  test("saturation returns 503 and retry hint", async () => {
+  test("saturation returns 429 and retry hint", async () => {
     const busy = new OgController(
       { execute: async () => { throw new ImageRendererBusyError(); } } as unknown as GetOgImageHandler,
       { execute: previewExecute } as unknown as GetOgPreviewHandler,
     );
     const response = await busy.render(new Request("http://localhost/og?title=Test"));
-    expect(response.status).toBe(503);
+    expect(response.status).toBe(429);
     expect(response.headers.get("retry-after")).toBe("5");
   });
 

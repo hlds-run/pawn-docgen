@@ -46,7 +46,7 @@ export class OgController {
     } catch (error: any) {
       if (error instanceof ImageRendererBusyError) {
         return new Response("Image generation is busy; try again later", {
-          status: 503,
+          status: 429,
           headers: { "Retry-After": "5" },
         });
       }
