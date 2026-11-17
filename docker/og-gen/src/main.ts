@@ -1,6 +1,7 @@
 import { HmacSecurityProvider } from "./infrastructure/crypto/hmac-security.provider";
 import { FontLoaderService } from "./infrastructure/fonts/font-loader.service";
 import { TakumiRenderer } from "./infrastructure/renderer/takumi.renderer";
+import { LimitedImageRenderer } from "./infrastructure/renderer/limited-image.renderer";
 
 import { GetOgImageHandler } from "./application/queries/get-og-image/get-og-image.handler";
 import { GetOgPreviewHandler } from "./application/queries/get-og-preview/get-og-preview.handler";
@@ -22,7 +23,7 @@ const securityProvider = new HmacSecurityProvider(
   config.checkHmac,
   config.checkHmacSymbols,
 );
-const imageRenderer = new TakumiRenderer(fontLoader);
+const imageRenderer = new LimitedImageRenderer(new TakumiRenderer(fontLoader), 1, 8);
 const htmlRenderer = new HtmlRenderer();
 
 const getOgImageHandler = new GetOgImageHandler(

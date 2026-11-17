@@ -1,7 +1,7 @@
 import { describe, expect, mock, test } from "bun:test";
 import { GetOgImageHandler } from "../../application/queries/get-og-image/get-og-image.handler";
 import { GetOgPreviewHandler } from "../../application/queries/get-og-preview/get-og-preview.handler";
-import { RenderQueueFullError } from "../../application/queries/get-og-image/render-queue";
+import { ImageRendererBusyError } from "../../application/errors/image-renderer-busy.error";
 import { OgController } from "./og.controller";
 
 describe("OG request handling", () => {
@@ -37,7 +37,7 @@ describe("OG request handling", () => {
 
   test("saturation returns 503 and retry hint", async () => {
     const busy = new OgController(
-      { execute: async () => { throw new RenderQueueFullError(); } } as unknown as GetOgImageHandler,
+      { execute: async () => { throw new ImageRendererBusyError(); } } as unknown as GetOgImageHandler,
       { execute: previewExecute } as unknown as GetOgPreviewHandler,
     );
     const response = await busy.render(new Request("http://localhost/og?title=Test"));

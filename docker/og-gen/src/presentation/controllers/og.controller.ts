@@ -3,7 +3,7 @@ import { GetOgImageQuery } from "../../application/queries/get-og-image/get-og-i
 import { GetOgPreviewHandler } from "../../application/queries/get-og-preview/get-og-preview.handler";
 import { OgImage } from "../../domain/entities/og-image.entity";
 import { Theme } from "../../domain/entities/theme.entity";
-import { RenderQueueFullError } from "../../application/queries/get-og-image/render-queue";
+import { ImageRendererBusyError } from "../../application/errors/image-renderer-busy.error";
 
 export class OgController {
   constructor(
@@ -44,7 +44,7 @@ export class OgController {
         },
       });
     } catch (error: any) {
-      if (error instanceof RenderQueueFullError) {
+      if (error instanceof ImageRendererBusyError) {
         return new Response("Image generation is busy; try again later", {
           status: 503,
           headers: { "Retry-After": "5" },

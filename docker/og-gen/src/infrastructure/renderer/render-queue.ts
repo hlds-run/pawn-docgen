@@ -1,4 +1,4 @@
-export class RenderQueueFullError extends Error {}
+import { ImageRendererBusyError } from "../../application/errors/image-renderer-busy.error";
 
 // Limit concurrent native image renders and bound memory held by waiting requests.
 export class RenderQueue {
@@ -10,7 +10,7 @@ export class RenderQueue {
   async run<T>(render: () => Promise<T>): Promise<T> {
     if (this.active >= this.limit) {
       if (this.waiting.length >= this.maxWaiting) {
-        throw new RenderQueueFullError();
+        throw new ImageRendererBusyError();
       }
       await new Promise<void>((resolve) => this.waiting.push(resolve));
     } else {

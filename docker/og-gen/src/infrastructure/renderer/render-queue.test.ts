@@ -1,5 +1,6 @@
 import { expect, test } from "bun:test";
-import { RenderQueue, RenderQueueFullError } from "./render-queue";
+import { RenderQueue } from "./render-queue";
+import { ImageRendererBusyError } from "../../application/errors/image-renderer-busy.error";
 
 test("limits concurrent renders, bounds the queue, and recovers after errors", async () => {
   const queue = new RenderQueue(1, 1);
@@ -12,7 +13,7 @@ test("limits concurrent renders, bounds the queue, and recovers after errors", a
   });
   const second = queue.run(async () => { started.push("second"); return 2; });
   expect(started).toEqual(["first"]);
-  await expect(queue.run(async () => 3)).rejects.toBeInstanceOf(RenderQueueFullError);
+  await expect(queue.run(async () => 3)).rejects.toBeInstanceOf(ImageRendererBusyError);
   release();
   await expect(first).rejects.toThrow("render failed");
   expect(await second).toBe(2);
