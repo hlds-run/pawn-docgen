@@ -17,6 +17,7 @@ export class TakumiRenderer implements ImageRenderer<Uint8Array> {
     const options = {
       width: image.getDimensions().width,
       height: image.getDimensions().height,
+      format: "png" as const,
       fonts: [
         { name: "IBMPlex", data: fontRegular, weight: 400, style: "normal" },
         { name: "IBMPlex", data: fontSemi, weight: 600, style: "normal" },

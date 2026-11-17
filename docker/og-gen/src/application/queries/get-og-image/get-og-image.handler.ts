@@ -1,8 +1,10 @@
 import { ImageRenderer } from "../../../domain/interfaces/image-renderer.interface";
 import { SecurityProvider } from "../../../domain/interfaces/security-provider.interface";
 import { GetOgImageQuery } from "./get-og-image.query";
+import { RenderQueue } from "./render-queue";
 
 export class GetOgImageHandler {
+  private readonly queue = new RenderQueue(1, 8);
   constructor(
     private readonly renderer: ImageRenderer<Uint8Array>,
     private readonly security: SecurityProvider,
@@ -16,6 +18,6 @@ export class GetOgImageHandler {
       throw new Error("Invalid signature");
     }
 
-    return await this.renderer.render(image);
+    return await this.queue.run(() => this.renderer.render(image));
   }
 }
