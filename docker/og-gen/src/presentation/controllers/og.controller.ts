@@ -3,6 +3,7 @@ import { GetOgImageQuery } from "../../application/queries/get-og-image/get-og-i
 import { GetOgPreviewHandler } from "../../application/queries/get-og-preview/get-og-preview.handler";
 import { OgImage } from "../../domain/entities/og-image.entity";
 import { Theme } from "../../domain/entities/theme.entity";
+import { ImageRendererBusyError } from "../../application/errors/image-renderer-busy.error";
 
 export class OgController {
   constructor(
@@ -18,6 +19,9 @@ export class OgController {
     const url = new URL(req.url);
 
     const title = url.searchParams.get("title") || "";
+    if (!title.trim()) {
+      return new Response("title is required", { status: 400 });
+    }
     const subtitle = url.searchParams.get("subtitle") || "";
     const tag = url.searchParams.get("tag") || "Pawn";
     const themeStr = url.searchParams.get("theme");
@@ -40,6 +44,12 @@ export class OgController {
         },
       });
     } catch (error: any) {
+      if (error instanceof ImageRendererBusyError) {
+        return new Response("Image generation is busy; try again later", {
+          status: 429,
+          headers: { "Retry-After": "5" },
+        });
+      }
       const isAuthError = error.message === "Invalid signature";
 
       return new Response(error.message, {
@@ -56,6 +66,9 @@ export class OgController {
     const url = new URL(req.url);
 
     const title = url.searchParams.get("title") || "";
+    if (!title.trim()) {
+      return new Response("title is required", { status: 400 });
+    }
     const subtitle = url.searchParams.get("subtitle") || "";
     const tag = url.searchParams.get("tag") || "Pawn";
     const themeStr = url.searchParams.get("theme");

@@ -191,6 +191,8 @@ Generates a PNG image for the specified parameters.
 
 - Content-Type: `image/png`
 - Cache-Control: `public, max-age=31536000, immutable` (1 year)
+- Missing, empty, or whitespace-only `title`: HTTP 400.
+- Image rendering is limited to one request at a time, with up to eight waiting requests. When the queue is full, the service returns HTTP 429 with `Retry-After: 5`.
 
 **Example:**
 
@@ -209,6 +211,7 @@ Renders HTML preview of the OG image for development and testing.
 **Response:**
 
 - Content-Type: `text/html; charset=utf-8`
+- Missing, empty, or whitespace-only `title`: HTTP 400.
 
 **Example:**
 
