@@ -1,19 +1,23 @@
+import PQueue from "p-queue";
+import { ImageRendererBusyError } from "../../application/errors/image-renderer-busy.error";
 import { OgImage } from "../../domain/entities/og-image.entity";
 import { ImageRenderer } from "../../domain/interfaces/image-renderer.interface";
-import { RenderQueue } from "./render-queue";
 
 export class LimitedImageRenderer implements ImageRenderer<Uint8Array> {
-  private readonly queue: RenderQueue;
+  private readonly queue: PQueue;
 
   constructor(
     private readonly renderer: ImageRenderer<Uint8Array>,
     limit: number,
-    maxWaiting: number,
+    private readonly maxWaiting: number,
   ) {
-    this.queue = new RenderQueue(limit, maxWaiting);
+    this.queue = new PQueue({ concurrency: limit });
   }
 
   render(image: OgImage): Promise<Uint8Array> {
-    return this.queue.run(() => this.renderer.render(image));
+    if (this.queue.pending >= this.queue.concurrency && this.queue.size >= this.maxWaiting) {
+      return Promise.reject(new ImageRendererBusyError());
+    }
+    return this.queue.add(() => this.renderer.render(image));
   }
 }
