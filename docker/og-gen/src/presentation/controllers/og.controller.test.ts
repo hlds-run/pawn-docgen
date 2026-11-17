@@ -43,6 +43,7 @@ describe("OG request handling", () => {
     const response = await busy.render(new Request("http://localhost/og?title=Test"));
     expect(response.status).toBe(429);
     expect(response.headers.get("retry-after")).toBe("5");
+    expect(await response.text()).toBe("Image generation is busy; try again later");
   });
 
   test("invalid signatures still return 403", async () => {
